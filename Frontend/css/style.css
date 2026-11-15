@@ -1,0 +1,89 @@
+/* ==========================================
+   BU Hangout - Shared Global Stylesheet
+   ================================          */
+
+:root {
+    --bu-blue: #003366;
+    --bu-orange: #FF6600;
+    --bu-light-bg: #F8F9FA;
+}
+
+body {
+    background-color: var(--bu-light-bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #333333;
+}
+
+/* Brand Colors & Utilities */
+.text-bu-blue {
+    color: var(--bu-blue) !important;
+}
+
+.text-bu-orange {
+    color: var(--bu-orange) !important;
+}
+
+.bg-bu-blue {
+    background-color: var(--bu-blue) !important;
+}
+
+.bg-bu-orange {
+    background-color: var(--bu-orange) !important;
+}
+
+/* Custom Primary Buttons */
+.btn-bu-primary {
+    background-color: var(--bu-orange);
+    color: white;
+    border-radius: 50px;
+    font-weight: 700;
+    border: none;
+    padding: 10px 24px;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-bu-primary:hover {
+    background-color: #e05500;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.25);
+}
+
+/* Pill Navigation Styling */
+.pill-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pill-nav a {
+    text-decoration: none;
+    color: var(--bu-blue);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 8px 18px;
+    border-radius: 50px;
+    transition: all 0.2s ease;
+}
+
+.pill-nav a:hover, 
+.pill-nav a.active {
+    background-color: var(--bu-orange);
+    color: #ffffff;
+}
+
+/* Card Enhancements */
+.content-card, .stall-card {
+    background: #ffffff;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Form Focus States */
+.form-control:focus, 
+.form-select:focus {
+    border-color: var(--bu-orange);
+    box-shadow: 0 0 0 0.25rem rgba(255, 102, 0, 0.25);
+}

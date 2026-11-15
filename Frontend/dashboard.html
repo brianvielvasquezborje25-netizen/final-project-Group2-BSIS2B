@@ -1,5 +1,302 @@
-<!-- In <head> -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Stall Directory - BU Hangout</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./img/logo-favicon.png">
+    
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        :root {
+            --bu-blue: #003366;
+            --bu-orange: #FF6600;
+        }
 
-<!-- Before </body> -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        body {
+            background-color: #F8F9FA;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .nav-brand-logo {
+            height: 42px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Pill Navigation */
+        .pill-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill-nav a {
+            text-decoration: none;
+            color: var(--bu-blue);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 8px 18px;
+            border-radius: 50px;
+            transition: all 0.2s ease;
+        }
+
+        .pill-nav a:hover, .pill-nav a.active {
+            background-color: var(--bu-orange);
+            color: #ffffff;
+        }
+
+        /* Search & Filter Hero */
+        .directory-banner {
+            background: linear-gradient(135deg, var(--bu-blue) 0%, #004d99 100%);
+            border-radius: 24px;
+            color: #ffffff;
+            padding: 2.2rem;
+        }
+
+        /* Stall Cards */
+        .stall-card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: none;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stall-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .stall-img {
+            height: 170px;
+            width: 100%;
+            object-fit: cover;
+            background-color: #e9ecef;
+        }
+
+        .btn-bu-primary {
+            background-color: var(--bu-orange);
+            color: white;
+            border-radius: 50px;
+            font-weight: 700;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-bu-primary:hover {
+            background-color: #e05500;
+            color: white;
+        }
+
+        .gcash-badge {
+            background-color: #007DFE;
+            color: white;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 50px;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <main class="container py-4 flex-grow-1">
+
+        <!-- Consistent Header & Navigation -->
+        <header class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 bg-white p-3 rounded-4 shadow-sm">
+            <a href="index.html" class="d-flex align-items-center gap-2 text-decoration-none">
+                <img src="./img/logo.png" alt="BU Hangout Logo" class="nav-brand-logo" onerror="this.style.display='none'">
+                <span class="fw-bold fs-4" style="color: var(--bu-orange);">BU Hangout</span>
+            </a>
+            
+            <nav class="pill-nav">
+                <a href="dashboard.html" class="active">Directory</a>
+                <a href="manage-stall.html">My Stall</a>
+                <a href="profile.html">Profile</a>
+                <a href="login.html">Logout</a>
+            </nav>
+        </header>
+
+        <!-- Search & Filter Section -->
+        <section class="directory-banner shadow-sm mb-4">
+            <div class="row align-items-center g-3">
+                <div class="col-lg-6">
+                    <span class="badge bg-warning text-dark rounded-pill mb-2">Bicol University Polangui</span>
+                    <h2 class="fw-bold mb-1">Campus Entrep Food Hub</h2>
+                    <p class="text-white-50 small mb-0">Browse student-run food stalls, check live open statuses, and view daily menus.</p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="bg-white p-2 rounded-pill d-flex align-items-center shadow-sm">
+                        <input type="text" id="stallSearchInput" class="form-control border-0 shadow-none ps-3" placeholder="Search stall name or section (e.g., BSIS 2B)...">
+                        <button class="btn btn-bu-primary px-4 py-2" type="button" id="searchBtn">Search</button>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <button class="btn btn-sm btn-light rounded-pill fw-bold px-3 filter-btn active" data-filter="all">All Stalls</button>
+                        <button class="btn btn-sm btn-outline-light rounded-pill px-3 filter-btn" data-filter="open">Open Now</button>
+                        <button class="btn btn-sm btn-outline-light rounded-pill px-3 filter-btn" data-filter="gcash">GCash Accepted</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<!-- Stalls Grid (All 6 Entrep Stalls - Maps 1:1 to Stall.js Schema) -->
+        <section class="row g-4" id="stallsGrid">
+
+            <!-- Stall 1: The Daily Crave -->
+            <div class="col-md-6 col-lg-4 stall-item" data-open="true" data-gcash="true">
+                <div class="stall-card">
+                    <div class="position-relative">
+                        <img src="./img/daily-crave.jpg" alt="The Daily Crave" class="stall-img" onerror="this.src='https://placehold.co/600x400/003366/FFFFFF?text=The+Daily+Crave'">
+                        <span class="badge bg-success position-absolute top-0 start-0 m-3 rounded-pill px-3">Open</span>
+                        <span class="gcash-badge position-absolute top-0 end-0 m-3">GCash Available</span>
+                    </div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">The Daily Crave</h5>
+                            <span class="badge bg-light text-dark border">BSIS 2B</span>
+                        </div>
+                        <p class="text-muted small mb-3">Hours: 8:30 AM - 4:30 PM</p>
+                        <div class="mt-auto d-flex gap-2">
+                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="The Daily Crave">
+                                View Menu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stall 2: Ferris Meal -->
+            <div class="col-md-6 col-lg-4 stall-item" data-open="true" data-gcash="false">
+                <div class="stall-card">
+                    <div class="position-relative">
+                        <img src="./img/ferris-meal.jpg" alt="Ferris Meal" class="stall-img" onerror="this.src='https://placehold.co/600x400/FF6600/FFFFFF?text=Ferris+Meal'">
+                        <span class="badge bg-success position-absolute top-0 start-0 m-3 rounded-pill px-3">Open</span>
+                    </div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">Ferris Meal</h5>
+                            <span class="badge bg-light text-dark border">BSIT 2A</span>
+                        </div>
+                        <p class="text-muted small mb-3">Hours: 9:00 AM - 5:00 PM</p>
+                        <div class="mt-auto d-flex gap-2">
+                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="Ferris Meal">
+                                View Menu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stall 3: Wrap & Zest -->
+            <div class="col-md-6 col-lg-4 stall-item" data-open="false" data-gcash="true">
+                <div class="stall-card">
+                    <div class="position-relative">
+                        <img src="./img/wrap-zest.jpg" alt="Wrap & Zest" class="stall-img" onerror="this.src='https://placehold.co/600x400/003366/FFFFFF?text=Wrap+%26+Zest'">
+                        <span class="badge bg-secondary position-absolute top-0 start-0 m-3 rounded-pill px-3">Closed</span>
+                        <span class="gcash-badge position-absolute top-0 end-0 m-3">GCash Available</span>
+                    </div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">Wrap & Zest</h5>
+                            <span class="badge bg-light text-dark border">BSED 3A</span>
+                        </div>
+                        <p class="text-muted small mb-3">Hours: 8:00 AM - 3:00 PM</p>
+                        <div class="mt-auto d-flex gap-2">
+                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="Wrap & Zest">
+                                View Menu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stall 4: Mack's -->
+            <div class="col-md-6 col-lg-4 stall-item" data-open="true" data-gcash="true">
+                <div class="stall-card">
+                    <div class="position-relative">
+                        <img src="./img/macks.jpg" alt="Mack's" class="stall-img" onerror="this.src='https://placehold.co/600x400/FF6600/FFFFFF?text=Mack%27s'">
+                        <span class="badge bg-success position-absolute top-0 start-0 m-3 rounded-pill px-3">Open</span>
+                        <span class="gcash-badge position-absolute top-0 end-0 m-3">GCash Available</span>
+                    </div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">Mack's</h5>
+                            <span class="badge bg-light text-dark border">BSENTREP 2A</span>
+                        </div>
+                        <p class="text-muted small mb-3">Hours: 8:00 AM - 4:00 PM</p>
+                        <div class="mt-auto d-flex gap-2">
+                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="Mack's">
+                                View Menu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stall 5: Anum -->
+            <div class="col-md-6 col-lg-4 stall-item" data-open="true" data-gcash="false">
+                <div class="stall-card">
+                    <div class="position-relative">
+                        <img src="./img/anum.jpg" alt="Anum" class="stall-img" onerror="this.src='https://placehold.co/600x400/003366/FFFFFF?text=Anum'">
+                        <span class="badge bg-success position-absolute top-0 start-0 m-3 rounded-pill px-3">Open</span>
+                    </div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">Anum</h5>
+                            <span class="badge bg-light text-dark border">BSENTREP 2B</span>
+                        </div>
+                        <p class="text-muted small mb-3">Hours: 9:00 AM - 4:30 PM</p>
+                        <div class="mt-auto d-flex gap-2">
+                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="Anum">
+                                View Menu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stall 6: Poppers -->
+            <div class="col-md-6 col-lg-4 stall-item" data-open="true" data-gcash="true">
+                <div class="stall-card">
+                    <div class="position-relative">
+                        <img src="./img/poppers.jpg" alt="Poppers" class="stall-img" onerror="this.src='https://placehold.co/600x400/FF6600/FFFFFF?text=Poppers'">
+                        <span class="badge bg-success position-absolute top-0 start-0 m-3 rounded-pill px-3">Open</span>
+                        <span class="gcash-badge position-absolute top-0 end-0 m-3">GCash Available</span>
+                    </div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">Poppers</h5>
+                            <span class="badge bg-light text-dark border">BSCS 2A</span>
+                        </div>
+                        <p class="text-muted small mb-3">Hours: 8:30 AM - 5:00 PM</p>
+                        <div class="mt-auto d-flex gap-2">
+                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="Poppers">
+                                View Menu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        
+    <!-- Consistent Footer -->
+    <footer class="bg-white text-center py-3 border-top mt-auto">
+        <div class="container text-muted small">
+            © 2026 BU Hangout • Bicol University Polangui Campus
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>
