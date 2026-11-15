@@ -2,9 +2,9 @@
   "name": "bu-entrephub",
   "version": "1.0.0",
   "description": "",
-  "main": "config/server.js",
+  "main": "Backend/server.js",
   "scripts": {
-    "start": "nodemon config/server.js"
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",

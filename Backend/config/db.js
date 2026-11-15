@@ -5,8 +5,10 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const connectDB = async () => {
   try {
-    // Uses MONGODB_URI to match your .env variable
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    // Added family: 4 to force IPv4 and bypass Windows/DNS routing issues
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      family: 4,
+    });
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`Database Connection Error: ${error.message}`);
