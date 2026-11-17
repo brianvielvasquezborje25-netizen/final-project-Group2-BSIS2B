@@ -1,302 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Stall Directory - BU Hangout</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="./img/logo-favicon.png">
-    
-    <!-- Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css">
-    <style>
-        :root {
-            --bu-blue: #003366;
-            --bu-orange: #FF6600;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Food Stall Directory | BU Hangout</title>
 
-        body {
-            background-color: #F8F9FA;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-        .nav-brand-logo {
-            height: 42px;
-            width: auto;
-            object-fit: contain;
-        }
+  <style>
+    :root {
+      --cream: #fff1b8;
+      --paper: #fffaf0;
+      --ink: #4a2a1a;            
+      --grid: rgba(70, 95, 205, .22);
+      --periwinkle: #a9b8ec;
+      --lavender: #dcc6ee;
+      --coral: #ff8552;
+      --bu-orange: #f26a00;
+      --bu-navy: #12306b;
+      --muted: #7a5a48;
+    }
 
-        /* Pill Navigation */
-        .pill-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+    body {
+      font-family: 'Nunito', sans-serif; color: var(--ink);
+      background-color: var(--cream);
+      /* graph-paper / notebook grid */
+      background-image:
+        linear-gradient(var(--grid) 1.5px, transparent 1.5px),
+        linear-gradient(90deg, var(--grid) 1.5px, transparent 1.5px);
+      background-size: 30px 30px;
+    }
+    h1, h2, h3, .display-font { font-family: 'Bagel Fat One', cursive; font-weight: 400; letter-spacing: .3px; }
 
-        .pill-nav a {
-            text-decoration: none;
-            color: var(--bu-blue);
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 8px 18px;
-            border-radius: 50px;
-            transition: all 0.2s ease;
-        }
+    /* ---------- reusable "sticker" look ---------- */
+    .sticker { border: 2.5px solid var(--ink); border-radius: 1.5rem; background: var(--paper); box-shadow: 5px 5px 0 var(--ink); }
+    .btn-ink {
+      background: var(--ink); color: #fff; border: 2.5px solid var(--ink); border-radius: 999px;
+      font-weight: 800; letter-spacing: .6px; text-transform: uppercase; font-size: .8rem; padding: .6rem 1.4rem;
+      transition: transform .12s, box-shadow .12s;
+    }
+    .btn-ink:hover, .btn-ink:focus { background: var(--bu-orange); border-color: var(--ink); color: #fff; transform: translate(-2px,-2px); box-shadow: 3px 3px 0 var(--ink); }
+    .btn-ink:disabled { opacity: .5; }
 
-        .pill-nav a:hover, .pill-nav a.active {
-            background-color: var(--bu-orange);
-            color: #ffffff;
-        }
+    /* ---------- Navbar ---------- */
+    .site-nav { background: var(--paper); border: 2.5px solid var(--ink); border-radius: 999px; box-shadow: 4px 4px 0 var(--ink); }
+    .brand-text { font-family: 'Bagel Fat One'; font-size: 1.6rem; color: var(--ink); line-height: 1; }
+    .brand-text span { color: var(--bu-orange); }
+    .site-nav .nav-link { color: var(--ink); font-weight: 800; font-size: .78rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 999px; padding: .45rem 1.1rem !important; }
+    .site-nav .nav-link:hover { background: var(--lavender); }
+    .site-nav .nav-link.active { background: var(--bu-orange); color: #fff; border: 2px solid var(--ink); }
 
-        /* Search & Filter Hero */
-        .directory-banner {
-            background: linear-gradient(135deg, var(--bu-blue) 0%, #004d99 100%);
-            border-radius: 24px;
-            color: #ffffff;
-            padding: 2.2rem;
-        }
+    /* ---------- Hero ---------- */
+    .hero { position: relative; padding: 2.5rem 2rem; background: var(--paper); }
+    .hero-eyebrow { font-weight: 800; font-size: .75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+    .hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.05; color: var(--ink); }
+    .hero h1 em { font-style: normal; color: var(--bu-orange); }
+    .campus-pill { display: inline-block; background: #ffc61a; border: 2px solid var(--ink); border-radius: 999px; font-weight: 800; font-size: .72rem; padding: .2rem .8rem; }
 
-        /* Stall Cards */
-        .stall-card {
-            background: #ffffff;
-            border-radius: 20px;
-            border: none;
-            overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+    .search-wrap { background: #fff; border: 2.5px solid var(--ink); border-radius: 999px; padding: .3rem; display: flex; align-items: center; }
+    .search-wrap input { border: 0; box-shadow: none; background: transparent; font-weight: 600; }
+    .search-wrap input::placeholder { color: #a08572; }
 
-        .stall-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
-        }
+    .filter-chip {
+      background: #fff; color: var(--ink); border: 2.5px solid var(--ink); border-radius: 999px;
+      font-weight: 800; font-size: .82rem; padding: .3rem 1rem; transition: .12s;
+    }
+    .filter-chip:hover { background: var(--lavender); }
+    .filter-chip.active { background: var(--periwinkle); box-shadow: 3px 3px 0 var(--ink); }
 
-        .stall-img {
-            height: 170px;
-            width: 100%;
-            object-fit: cover;
-            background-color: #e9ecef;
-        }
+    .doodle { position: absolute; font-size: 2.2rem; color: var(--ink); opacity: .9; pointer-events: none; }
+    .doodle.d1 { top: -18px; left: 22px;  transform: rotate(-14deg); font-size: 2.6rem; background: var(--lavender); border: 2.5px solid var(--ink); border-radius: 50%; padding: .35rem .6rem; }
+    .doodle.d2 { bottom: -22px; right: 40px; transform: rotate(12deg); font-size: 2.4rem; background: var(--coral); border: 2.5px solid var(--ink); border-radius: 50%; padding: .35rem .6rem; }
 
-        .btn-bu-primary {
-            background-color: var(--bu-orange);
-            color: white;
-            border-radius: 50px;
-            font-weight: 700;
-            border: none;
-            transition: all 0.2s ease;
-        }
+    /* ---------- Scrolling ribbon ---------- */
+    .ribbon-wrap { overflow: hidden; margin: 2.6rem -12px 1.5rem; }
+    .ribbon {
+      transform: rotate(-1.4deg); background: var(--lavender); border-block: 2.5px solid var(--ink);
+      white-space: nowrap; padding: .55rem 0;
+    }
+    .ribbon-track { display: inline-block; animation: slide 28s linear infinite; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; font-size: .78rem; }
+    .ribbon-track span { margin: 0 1.2rem; }
+    @keyframes slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) { .ribbon-track { animation: none; } }
 
-        .btn-bu-primary:hover {
-            background-color: #e05500;
-            color: white;
-        }
+    /* ---------- Stall cards ---------- */
+    .stall-card { overflow: hidden; height: 100%; transition: transform .15s, box-shadow .15s; display: flex; flex-direction: column; }
+    .stall-card:hover { transform: translate(-3px,-3px); box-shadow: 8px 8px 0 var(--ink); }
+    .cover { height: 150px; position: relative; display: flex; align-items: center; justify-content: center; border-bottom: 2.5px solid var(--ink); }
+    .cover-0 { background: var(--lavender); } .cover-1 { background: var(--coral); }
+    .cover-2 { background: var(--periwinkle); } .cover-3 { background: #ffd966; }
 
-        .gcash-badge {
-            background-color: #007DFE;
-            color: white;
-            font-size: 0.72rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 50px;
-        }
-    </style>
+    .scallop { position: relative; width: 92px; height: 92px; display: grid; place-items: center; }
+    .scallop svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .scallop i { position: relative; font-size: 2.1rem; color: var(--ink); }
+
+    .tag-sticker {
+      position: absolute; top: 12px; font-weight: 800; font-size: .7rem; text-transform: uppercase; letter-spacing: .8px;
+      border: 2px solid var(--ink); border-radius: 999px; padding: .15rem .7rem; background: #fff;
+    }
+    .tag-status { left: 12px; transform: rotate(-4deg); }
+    .tag-status.open { background: #8ee6a3; }
+    .tag-status.closed { background: #d9d2cc; }
+    .tag-gcash { right: 12px; transform: rotate(3deg); background: #7ec0ff; }
+
+    .stall-card.is-closed .cover { filter: saturate(.35); }
+    .stall-name { font-size: 1.45rem; line-height: 1.1; }
+    .section-tag { font-weight: 800; font-size: .72rem; border: 2px solid var(--ink); border-radius: 999px; padding: .15rem .7rem; background: var(--cream); white-space: nowrap; }
+
+    .empty-state { padding: 3rem 1rem; }
+
+    /* ---------- Colored bands with wavy edge ---------- */
+    .band { position: relative; padding: 4.5rem 0 4rem; margin-top: 4.5rem; border-top: 2.5px solid var(--ink); }
+    .band .wave { position: absolute; left: 0; top: 0; width: 100%; height: 34px; transform: translateY(-99%); color: inherit; }
+    .band-periwinkle { background: var(--periwinkle); color: var(--periwinkle); }
+    .band-coral { background: var(--coral); color: var(--coral); margin-top: 4.5rem; }
+    .band > .container { color: var(--ink); }
+    .band h2 { font-size: 1.6rem; letter-spacing: 2px; text-transform: uppercase; font-family: 'Nunito'; font-weight: 800; }
+    .feature { text-align: center; }
+    .feature .scallop { width: 108px; height: 108px; margin: 0 auto .8rem; }
+    .feature .scallop i { font-size: 2.4rem; }
+    .feature p { font-weight: 700; margin: 0; font-size: .85rem; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* ---------- Footer ---------- */
+    footer { background: var(--paper); border-top: 2.5px solid var(--ink); }
+    footer a { color: var(--ink); text-decoration: none; font-weight: 700; font-size: .78rem; letter-spacing: 1px; text-transform: uppercase; }
+    footer a:hover { color: var(--bu-orange); }
+
+    :focus-visible { outline: 3px solid var(--bu-orange); outline-offset: 3px; }
+  </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
 
-    <main class="container py-4 flex-grow-1">
+<body>
 
-        <!-- Consistent Header & Navigation -->
-        <header class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 bg-white p-3 rounded-4 shadow-sm">
-            <a href="index.html" class="d-flex align-items-center gap-2 text-decoration-none">
-                <img src="./img/logo.png" alt="BU Hangout Logo" class="nav-brand-logo" onerror="this.style.display='none'">
-                <span class="fw-bold fs-4" style="color: var(--bu-orange);">BU Hangout</span>
-            </a>
-            
-            <nav class="pill-nav">
-                <a href="dashboard.html" class="active">Directory</a>
-                <a href="manage-stall.html">My Stall</a>
-                <a href="profile.html">Profile</a>
-                <a href="login.html">Logout</a>
-            </nav>
-        </header>
+  <!-- ================= HEADER / NAVIGATION ================= -->
+  <div class="container pt-4">
+    <nav class="navbar navbar-expand-md site-nav px-3 px-md-4 py-2">
+      <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="dashboard.html">
+        <img src="img/logo.png" alt="" height="42" onerror="this.style.display='none'">
+        <span class="brand-text">BU <span>Hangout</span></span>
+      </a>
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+              data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="bi bi-list fs-2"></i>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+        <ul class="navbar-nav gap-md-1 py-2 py-md-0">
+          <li class="nav-item"><a class="nav-link active" href="dashboard.html" aria-current="page">Directory</a></li>
+          <li class="nav-item"><a class="nav-link" href="my-stall.html">My Stall</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
 
-        <!-- Search & Filter Section -->
-        <section class="directory-banner shadow-sm mb-4">
-            <div class="row align-items-center g-3">
-                <div class="col-lg-6">
-                    <span class="badge bg-warning text-dark rounded-pill mb-2">Bicol University Polangui</span>
-                    <h2 class="fw-bold mb-1">Campus Entrep Food Hub</h2>
-                    <p class="text-white-50 small mb-0">Browse student-run food stalls, check live open statuses, and view daily menus.</p>
-                </div>
-                <div class="col-lg-6">
-                    <div class="bg-white p-2 rounded-pill d-flex align-items-center shadow-sm">
-                        <input type="text" id="stallSearchInput" class="form-control border-0 shadow-none ps-3" placeholder="Search stall name or section (e.g., BSIS 2B)...">
-                        <button class="btn btn-bu-primary px-4 py-2" type="button" id="searchBtn">Search</button>
-                    </div>
-                    <div class="d-flex flex-wrap gap-2 mt-3">
-                        <button class="btn btn-sm btn-light rounded-pill fw-bold px-3 filter-btn active" data-filter="all">All Stalls</button>
-                        <button class="btn btn-sm btn-outline-light rounded-pill px-3 filter-btn" data-filter="open">Open Now</button>
-                        <button class="btn btn-sm btn-outline-light rounded-pill px-3 filter-btn" data-filter="gcash">GCash Accepted</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <main class="container">
 
-<!-- Stalls Grid (All 6 Entrep Stalls - Maps 1:1 to Stall.js Schema) -->
-        <section class="row g-4" id="stallsGrid">
+    <!-- ================= HERO + SEARCH ================= -->
+    <section class="hero sticker mt-5">
+      <i class="bi bi-mortarboard-fill doodle d1" aria-hidden="true"></i>
+      <i class="bi bi-cup-hot-fill doodle d2" aria-hidden="true"></i>
 
-            <!-- Stall 1: The Daily Crave -->
-            <div class="col-md-6 col-lg-4 stall-item" data-open="true" data-gcash="true">
-                <div class="stall-card">
-                    <div class="position-relative">
-                        <img src="./img/daily-crave.jpg" alt="The Daily Crave" class="stall-img" onerror="this.src='https://placehold.co/600x400/003366/FFFFFF?text=The+Daily+Crave'">
-                        <span class="badge bg-success position-absolute top-0 start-0 m-3 rounded-pill px-3">Open</span>
-                        <span class="gcash-badge position-absolute top-0 end-0 m-3">GCash Available</span>
-                    </div>
-                    <div class="p-4 d-flex flex-column flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-start mb-1">
-                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">The Daily Crave</h5>
-                            <span class="badge bg-light text-dark border">BSIS 2B</span>
-                        </div>
-                        <p class="text-muted small mb-3">Hours: 8:30 AM - 4:30 PM</p>
-                        <div class="mt-auto d-flex gap-2">
-                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="The Daily Crave">
-                                View Menu
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stall 2: Ferris Meal -->
-            <div class="col-md-6 col-lg-4 stall-item" data-open="true" data-gcash="false">
-                <div class="stall-card">
-                    <div class="position-relative">
-                        <img src="./img/ferris-meal.jpg" alt="Ferris Meal" class="stall-img" onerror="this.src='https://placehold.co/600x400/FF6600/FFFFFF?text=Ferris+Meal'">
-                        <span class="badge bg-success position-absolute top-0 start-0 m-3 rounded-pill px-3">Open</span>
-                    </div>
-                    <div class="p-4 d-flex flex-column flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-start mb-1">
-                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">Ferris Meal</h5>
-                            <span class="badge bg-light text-dark border">BSIT 2A</span>
-                        </div>
-                        <p class="text-muted small mb-3">Hours: 9:00 AM - 5:00 PM</p>
-                        <div class="mt-auto d-flex gap-2">
-                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="Ferris Meal">
-                                View Menu
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stall 3: Wrap & Zest -->
-            <div class="col-md-6 col-lg-4 stall-item" data-open="false" data-gcash="true">
-                <div class="stall-card">
-                    <div class="position-relative">
-                        <img src="./img/wrap-zest.jpg" alt="Wrap & Zest" class="stall-img" onerror="this.src='https://placehold.co/600x400/003366/FFFFFF?text=Wrap+%26+Zest'">
-                        <span class="badge bg-secondary position-absolute top-0 start-0 m-3 rounded-pill px-3">Closed</span>
-                        <span class="gcash-badge position-absolute top-0 end-0 m-3">GCash Available</span>
-                    </div>
-                    <div class="p-4 d-flex flex-column flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-start mb-1">
-                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">Wrap & Zest</h5>
-                            <span class="badge bg-light text-dark border">BSED 3A</span>
-                        </div>
-                        <p class="text-muted small mb-3">Hours: 8:00 AM - 3:00 PM</p>
-                        <div class="mt-auto d-flex gap-2">
-                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="Wrap & Zest">
-                                View Menu
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stall 4: Mack's -->
-            <div class="col-md-6 col-lg-4 stall-item" data-open="true" data-gcash="true">
-                <div class="stall-card">
-                    <div class="position-relative">
-                        <img src="./img/macks.jpg" alt="Mack's" class="stall-img" onerror="this.src='https://placehold.co/600x400/FF6600/FFFFFF?text=Mack%27s'">
-                        <span class="badge bg-success position-absolute top-0 start-0 m-3 rounded-pill px-3">Open</span>
-                        <span class="gcash-badge position-absolute top-0 end-0 m-3">GCash Available</span>
-                    </div>
-                    <div class="p-4 d-flex flex-column flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-start mb-1">
-                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">Mack's</h5>
-                            <span class="badge bg-light text-dark border">BSENTREP 2A</span>
-                        </div>
-                        <p class="text-muted small mb-3">Hours: 8:00 AM - 4:00 PM</p>
-                        <div class="mt-auto d-flex gap-2">
-                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="Mack's">
-                                View Menu
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stall 5: Anum -->
-            <div class="col-md-6 col-lg-4 stall-item" data-open="true" data-gcash="false">
-                <div class="stall-card">
-                    <div class="position-relative">
-                        <img src="./img/anum.jpg" alt="Anum" class="stall-img" onerror="this.src='https://placehold.co/600x400/003366/FFFFFF?text=Anum'">
-                        <span class="badge bg-success position-absolute top-0 start-0 m-3 rounded-pill px-3">Open</span>
-                    </div>
-                    <div class="p-4 d-flex flex-column flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-start mb-1">
-                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">Anum</h5>
-                            <span class="badge bg-light text-dark border">BSENTREP 2B</span>
-                        </div>
-                        <p class="text-muted small mb-3">Hours: 9:00 AM - 4:30 PM</p>
-                        <div class="mt-auto d-flex gap-2">
-                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="Anum">
-                                View Menu
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stall 6: Poppers -->
-            <div class="col-md-6 col-lg-4 stall-item" data-open="true" data-gcash="true">
-                <div class="stall-card">
-                    <div class="position-relative">
-                        <img src="./img/poppers.jpg" alt="Poppers" class="stall-img" onerror="this.src='https://placehold.co/600x400/FF6600/FFFFFF?text=Poppers'">
-                        <span class="badge bg-success position-absolute top-0 start-0 m-3 rounded-pill px-3">Open</span>
-                        <span class="gcash-badge position-absolute top-0 end-0 m-3">GCash Available</span>
-                    </div>
-                    <div class="p-4 d-flex flex-column flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-start mb-1">
-                            <h5 class="fw-bold mb-0" style="color: var(--bu-blue);">Poppers</h5>
-                            <span class="badge bg-light text-dark border">BSCS 2A</span>
-                        </div>
-                        <p class="text-muted small mb-3">Hours: 8:30 AM - 5:00 PM</p>
-                        <div class="mt-auto d-flex gap-2">
-                            <button type="button" class="btn btn-bu-primary flex-grow-1 py-2" data-bs-toggle="modal" data-bs-target="#menuModal" data-stall-name="Poppers">
-                                View Menu
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-        
-    <!-- Consistent Footer -->
-    <footer class="bg-white text-center py-3 border-top mt-auto">
-        <div class="container text-muted small">
-            © 2026 BU Hangout • Bicol University Polangui Campus
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+          <span class="campus-pill mb-3">Bicol University Polangui</span>
+          <p class="hero-eyebrow mb-1">Student-run &middot; Campus-fresh</p>
+          <h1 class="mb-3">Campus Entrep <em>Food Hub</em></h1>
+          <p class="mb-0 fw-semibold" style="color:var(--muted)">Browse student-run food stalls, check live open statuses, and view daily menus.</p>
         </div>
-    </footer>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./js/app.js"></script>
+        <div class="col-lg-6">
+          <form id="searchForm" action="#" method="GET" role="search">
+            <div class="search-wrap">
+              <i class="bi bi-search ms-3" aria-hidden="true"></i>
+              <label for="searchInput" class="visually-hidden">Search stalls</label>
+              <input type="search" class="form-control" id="searchInput" name="q" placeholder="Search stall name or section (e.g., BSIS 2B)...">
+              <button type="submit" class="btn btn-ink">Search</button>
+            </div>
+          </form>
+
+          <div class="d-flex flex-wrap gap-2 mt-3" id="filterChips" role="group" aria-label="Filter stalls">
+            <button type="button" class="filter-chip active" data-filter="all">All Stalls</button>
+            <button type="button" class="filter-chip" data-filter="open">Open Now</button>
+            <button type="button" class="filter-chip" data-filter="gcash">GCash Accepted</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= RIBBON ================= -->
+    <div class="ribbon-wrap" aria-hidden="true">
+      <div class="ribbon">
+        <div class="ribbon-track" id="ribbonTrack"></div>
+      </div>
+    </div>
+
+    <!-- ================= DIRECTORY ================= -->
+    <section aria-labelledby="dirTitle">
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+        <div>
+          <h2 class="h1 mb-1" id="dirTitle">Today's Stalls</h2>
+          <p class="mb-0 fw-bold" style="color:var(--muted)" id="resultCount" aria-live="polite">Showing 0 stalls</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <label for="sortSelect" class="fw-bold small text-uppercase mb-0" style="letter-spacing:1px">Sort</label>
+          <select id="sortSelect" name="sort" class="form-select form-select-sm w-auto fw-bold"
+                  style="border:2.5px solid var(--ink); border-radius:999px; background-color:#fff">
+            <option value="open">Open first</option>
+            <option value="name">Name (A–Z)</option>
+            <option value="section">Section</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-4" id="stallGrid"></div>
+
+      <div class="empty-state text-center d-none sticker" id="emptyState">
+        <i class="bi bi-emoji-frown fs-1 d-block mb-2"></i>
+        <h2 class="h3">No stalls found</h2>
+        <p class="mb-3 fw-semibold">Try a different keyword or clear the filters.</p>
+        <button class="btn btn-ink" id="clearFilters">Clear filters</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= WHY BU HANGOUT (blue band) ================= -->
+  <section class="band band-periwinkle" aria-labelledby="whyTitle">
+    <svg class="wave" viewBox="0 0 1440 34" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 34V18 Q60 0 120 18 T240 18 T360 18 T480 18 T600 18 T720 18 T840 18 T960 18 T1080 18 T1200 18 T1320 18 T1440 18V34Z"/></svg>
+    <div class="container">
+      <h2 class="text-center mb-5" id="whyTitle">Why BU Hangout</h2>
+      <div class="row g-4 justify-content-center">
+        <div class="col-6 col-md-3 feature"><div class="scallop" data-fill="#fff1b8"><i class="bi bi-people-fill"></i></div><p>Student-run</p></div>
+        <div class="col-6 col-md-3 feature"><div class="scallop" data-fill="#ffd0b8"><i class="bi bi-broadcast"></i></div><p>Live open status</p></div>
+        <div class="col-6 col-md-3 feature"><div class="scallop" data-fill="#dcc6ee"><i class="bi bi-journal-richtext"></i></div><p>Daily menus</p></div>
+        <div class="col-6 col-md-3 feature"><div class="scallop" data-fill="#bfe3ff"><i class="bi bi-phone-fill"></i></div><p>GCash friendly</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RUN A STALL (coral band) ================= -->
+  <section class="band band-coral" aria-labelledby="runTitle">
+    <svg class="wave" viewBox="0 0 1440 34" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 34V18 Q60 0 120 18 T240 18 T360 18 T480 18 T600 18 T720 18 T840 18 T960 18 T1080 18 T1200 18 T1320 18 T1440 18V34Z"/></svg>
+    <div class="container text-center">
+      <h2 class="mb-3" id="runTitle">Running a stall?</h2>
+      <p class="fw-bold mb-4">Update your hours, post today's menu, and switch your status to Open.</p>
+      <a href="my-stall.html" class="btn btn-ink">Go to My Stall</a>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="py-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+      <span class="brand-text">BU <span>Hangout</span></span>
+      <nav class="d-flex gap-4" aria-label="Footer">
+        <a href="dashboard.html">Directory</a><a href="my-stall.html">My Stall</a><a href="profile.html">Profile</a>
+      </nav>
+      <small class="fw-bold" style="color:var(--muted)">&copy; 2026 Bicol University Polangui</small>
+    </div>
+  </footer>
+
+  <!-- ================= MODALS (placeholders) ================= -->
+  <div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content sticker">
+        <div class="modal-header border-0">
+          <h2 class="modal-title h3" id="menuModalTitle">Menu</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="fw-bold mb-3" style="color:var(--muted)" id="menuModalMeta"></p>
+          <div class="p-3 rounded-4 fw-semibold" style="border:2px dashed var(--ink); background:var(--cream)">
+            Menu items will load here from the API during backend integration.
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-ink" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content sticker">
+        <div class="modal-body text-center p-4">
+          <i class="bi bi-box-arrow-right fs-1"></i>
+          <h2 class="h3 mt-2" id="logoutTitle">Log out?</h2>
+          <p class="small fw-semibold">You'll need to sign in again to manage your stall.</p>
+          <form action="#" method="POST" id="logoutForm" class="d-flex gap-2 justify-content-center">
+            <button type="button" class="btn btn-ink" style="background:#fff;color:var(--ink)" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-ink">Logout</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /* Sample data: replace with fetch('/api/stalls') during backend integration.
+       Fields mirror the Stall table: name, section, hours, is_open, accepts_gcash */
+    const stalls = [
+      { id: 1, name: 'The Daily Crave', section: 'BS ENTREP', hours: '8:30 AM - 4:30 PM', isOpen: true,  gcash: true, icon: 'bi-cup-hot-fill' },
+      { id: 2, name: 'Ferris Meal',     section: 'BS ENTREP', hours: '9:00 AM - 5:00 PM', isOpen: true,  gcash: true, icon: 'bi-egg-fried' },
+      { id: 3, name: 'Wrap & Zest',     section: 'BS ENTREP', hours: '8:00 AM - 3:00 PM', isOpen: false, gcash: true, icon: 'bi-basket2-fill' },
+      { id: 4, name: 'Sip&sizzle',      section: 'BS ENTREP', hours: '8:30 AM - 4:30 PM', isOpen: true,  gcash: true, icon: 'bi-cup-hot-fill' },
+      { id: 5, name: "Mack's",          section: 'BS ENTREP', hours: '9:00 AM - 5:00 PM', isOpen: true,  gcash: true, icon: 'bi-egg-fried' },
+      { id: 6, name: 'Anum',            section: 'BS ENTREP', hours: '8:00 AM - 3:00 PM', isOpen: false, gcash: true, icon: 'bi-basket2-fill' },
+
+    ];
+
+    const state = { query: '', filter: 'all', sort: 'open' };
+    const grid = document.getElementById('stallGrid');
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    /* Scalloped (wavy-edge) badge, like the inspiration's stickers */
+    function scallopSVG(fill) {
+      const n = 12, cx = 50, cy = 50, r = 42, amp = 5, pts = [];
+      for (let i = 0; i <= 240; i++) {
+        const a = (i / 240) * Math.PI * 2, rr = r + amp * Math.sin(a * n);
+        pts.push((cx + rr * Math.cos(a)).toFixed(2) + ',' + (cy + rr * Math.sin(a)).toFixed(2));
+      }
+      return `<svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="${pts.join(' ')}" fill="${fill}" stroke="#4a2a1a" stroke-width="2.5" stroke-linejoin="round"/></svg>`;
+    }
+    function decorateScallops(root = document) {
+      root.querySelectorAll('.scallop:not([data-done])').forEach(el => {
+        el.insertAdjacentHTML('afterbegin', scallopSVG(el.dataset.fill || '#fffaf0'));
+        el.dataset.done = '1';
+      });
+    }
+
+    function cardHTML(s, i) {
+      return `
+      <div class="col-12 col-md-6 col-xl-4">
+        <article class="stall-card sticker ${s.isOpen ? '' : 'is-closed'}">
+          <div class="cover cover-${i % 4}">
+            <span class="tag-sticker tag-status ${s.isOpen ? 'open' : 'closed'}">${s.isOpen ? 'Open' : 'Closed'}</span>
+            ${s.gcash ? '<span class="tag-sticker tag-gcash">GCash</span>' : ''}
+            <div class="scallop" data-fill="#fffaf0"><i class="bi ${s.icon}" aria-hidden="true"></i></div>
+          </div>
+          <div class="p-4 d-flex flex-column flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+              <h3 class="stall-name mb-0">${esc(s.name)}</h3>
+              <span class="section-tag">${esc(s.section)}</span>
+            </div>
+            <p class="fw-bold small mb-4" style="color:var(--muted)"><i class="bi bi-clock me-1"></i>${esc(s.hours)}</p>
+            <button type="button" class="btn btn-ink w-100 mt-auto view-menu" data-id="${s.id}">View Menu</button>
+          </div>
+        </article>
+      </div>`;
+    }
+
+    function render() {
+      const q = state.query.trim().toLowerCase();
+      const list = stalls.filter(s =>
+        (!q || s.name.toLowerCase().includes(q) || s.section.toLowerCase().includes(q)) &&
+        (state.filter === 'all' || (state.filter === 'open' && s.isOpen) || (state.filter === 'gcash' && s.gcash))
+      ).sort((a, b) =>
+        state.sort === 'name'    ? a.name.localeCompare(b.name) :
+        state.sort === 'section' ? a.section.localeCompare(b.section) :
+        (b.isOpen - a.isOpen) || a.name.localeCompare(b.name)
+      );
+
+      grid.innerHTML = list.map(cardHTML).join('');
+      decorateScallops(grid);
+      document.getElementById('emptyState').classList.toggle('d-none', list.length > 0);
+      document.getElementById('resultCount').textContent = `Showing ${list.length} stall${list.length === 1 ? '' : 's'}`;
+    }
+
+    // Ribbon text (duplicated for a seamless loop)
+    const ribbonItems = ['Student-run', 'Open now', 'GCash accepted', 'Fresh daily', 'BU Polangui'];
+    const ribbonHTML = ribbonItems.map(t => `<span>${t}</span><span>&#9733;</span>`).join('');
+    document.getElementById('ribbonTrack').innerHTML = ribbonHTML.repeat(6);
+
+    // Events
+    document.getElementById('searchForm').addEventListener('submit', e => { e.preventDefault(); state.query = document.getElementById('searchInput').value; render(); });
+    document.getElementById('searchInput').addEventListener('input', e => { state.query = e.target.value; render(); });
+
+    document.getElementById('filterChips').addEventListener('click', e => {
+      const chip = e.target.closest('.filter-chip'); if (!chip) return;
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active'); state.filter = chip.dataset.filter; render();
+    });
+
+    document.getElementById('sortSelect').addEventListener('change', e => { state.sort = e.target.value; render(); });
+
+    document.getElementById('clearFilters').addEventListener('click', () => {
+      state.query = ''; state.filter = 'all';
+      document.getElementById('searchInput').value = '';
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter === 'all'));
+      render();
+    });
+
+    grid.addEventListener('click', e => {
+      const btn = e.target.closest('.view-menu'); if (!btn) return;
+      const s = stalls.find(x => x.id === Number(btn.dataset.id));
+      document.getElementById('menuModalTitle').textContent = s.name + ' Menu';
+      document.getElementById('menuModalMeta').textContent = `${s.section} · ${s.hours} · ${s.isOpen ? 'Open' : 'Closed'}`;
+      new bootstrap.Modal(document.getElementById('menuModal')).show();
+    });
+
+    decorateScallops();
+    render();
+  </script>
 </body>
 </html>

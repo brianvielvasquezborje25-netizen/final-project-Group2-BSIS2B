@@ -1,106 +1,60 @@
-/* ==========================================
-   BU Hangout - Client-Side App & API Placeholders
-   ========================================== */
+/* Shared helpers for all BU Hangout pages */
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("BU Hangout Frontend Loaded Successfully!");
+/* Scalloped (wavy-edge) badge, drawn as inline SVG */
+function scallopSVG(fill) {
+  const n = 12, cx = 50, cy = 50, r = 42, amp = 5, pts = [];
+  for (let i = 0; i <= 240; i++) {
+    const a = (i / 240) * Math.PI * 2, rr = r + amp * Math.sin(a * n);
+    pts.push((cx + rr * Math.cos(a)).toFixed(2) + ',' + (cy + rr * Math.sin(a)).toFixed(2));
+  }
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="${pts.join(' ')}" fill="${fill}" stroke="#4a2a1a" stroke-width="2.5" stroke-linejoin="round"/></svg>`;
+}
+function decorateScallops(root = document) {
+  root.querySelectorAll('.scallop:not([data-done])').forEach(el => {
+    el.insertAdjacentHTML('afterbegin', scallopSVG(el.dataset.fill || '#fffaf0'));
+    el.dataset.done = '1';
+  });
+}
 
-    // ==========================================
-    // 1. LOGIN FORM HANDLER (User.js)
-    // ==========================================
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            console.log("Attempting login with:", { email });
-            
-            // TODO: Connect to Backend API (e.g., POST /api/users/login)
-            // Example:
-            // const response = await fetch('http://localhost:5000/api/users/login', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ email, password })
-            // });
-            // const data = await response.json();
-            
-            // Temporary redirect placeholder for grading/testing:
-            window.location.href = 'dashboard.html';
-        });
-    }
-
-    // ==========================================
-    // 2. REGISTER FORM HANDLER (User.js)
-    // ==========================================
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const role = document.getElementById('role').value;
-
-            console.log("Registering user:", { name, email, role });
-            
-            // TODO: Connect to Backend API (e.g., POST /api/users/register)
-            alert('Registration placeholder triggered successfully!');
-            window.location.href = 'login.html';
-        });
-    }
-
-    // ==========================================
-    // 3. STALL DIRECTORY & SEARCH FILTER (Stall.js)
-    // ==========================================
-    const stallSearchInput = document.getElementById('stallSearchInput');
-    const searchBtn = document.getElementById('searchBtn');
-    
-    if (searchBtn && stallSearchInput) {
-        searchBtn.addEventListener('click', () => {
-            const query = stallSearchInput.value.toLowerCase();
-            console.log("Searching stalls for:", query);
-            
-            // TODO: Filter stall items or fetch from GET /api/stalls?search=query
-        });
-    }
-
-    // ==========================================
-    // 4. ADD MENU ITEM FORM (MenuItem.js)
-    // ==========================================
-    const addMenuItemForm = document.getElementById('addMenuItemForm');
-    if (addMenuItemForm) {
-        addMenuItemForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const itemName = document.getElementById('itemName').value;
-            const category = document.getElementById('category').value;
-            const price = document.getElementById('price').value;
-            const isAvailable = document.getElementById('isAvailable').checked;
-            const isBestseller = document.getElementById('isBestseller')?.checked || false;
-
-            console.log("Adding menu item:", { itemName, category, price, isAvailable, isBestseller });
-
-            // TODO: Connect to Backend API (e.g., POST /api/menuitems)
-            alert(`Menu item "${itemName}" added successfully!`);
-            addMenuItemForm.reset();
-        });
-    }
-
-    // ==========================================
-    // 5. DYNAMIC MENU MODAL POPULATOR
-    // ==========================================
-    const menuModal = document.getElementById('menuModal');
-    if (menuModal) {
-        menuModal.addEventListener('show.bs.modal', (event) => {
-            const button = event.relatedTarget;
-            const stallName = button.getAttribute('data-stall-name');
-            
-            const modalTitle = menuModal.querySelector('.modal-title');
-            modalTitle.textContent = `${stallName} - Menu`;
-
-            console.log(`Fetching menu items for stall: ${stallName}`);
-            // TODO: Fetch menu items belonging to this stall from backend API
-        });
-    }
+/* Show/hide password: <button data-toggle-password="#passwordInputId"> */
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-toggle-password]');
+  if (!btn) return;
+  const input = document.querySelector(btn.dataset.togglePassword);
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  btn.querySelector('i').className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+  btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
 });
+
+/* Logout modal is injected on any page that has a logout trigger */
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.querySelector('[data-bs-target="#logoutModal"]') && !document.getElementById('logoutModal')) {
+    document.body.insertAdjacentHTML('beforeend', `
+      <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+          <div class="modal-content sticker">
+            <div class="modal-body text-center p-4">
+              <i class="bi bi-box-arrow-right fs-1"></i>
+              <h2 class="h3 mt-2" id="logoutTitle">Log out?</h2>
+              <p class="small fw-semibold">You'll need to sign in again to manage your stall.</p>
+              <form action="#" method="POST" id="logoutForm" class="d-flex gap-2 justify-content-center">
+                <button type="button" class="btn btn-ink btn-ink-outline" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-ink">Logout</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>`);
+    // TODO (backend week): on submit, call POST /api/auth/logout, clear the token, redirect to login.html
+    document.getElementById('logoutForm').addEventListener('submit', e => { e.preventDefault(); window.location.href = 'login.html'; });
+  }
+  decorateScallops();
+});
+
+/* Bootstrap validation helper: add class "needs-validation" + novalidate to a form */
+document.addEventListener('submit', e => {
+  const form = e.target.closest('.needs-validation');
+  if (form && !form.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+  if (form) form.classList.add('was-validated');
+}, true);

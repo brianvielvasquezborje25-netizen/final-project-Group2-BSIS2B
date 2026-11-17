@@ -1,89 +1,117 @@
-/* ==========================================
-   BU Hangout - Shared Global Stylesheet
-   ================================          */
-
+/* =========================================================
+   BU Hangout shared theme (campus notebook look)
+   Used by: index, login, register, dashboard, profile, ManageStall
+   ========================================================= */
 :root {
-    --bu-blue: #003366;
-    --bu-orange: #FF6600;
-    --bu-light-bg: #F8F9FA;
+  --cream: #fff1b8;
+  --paper: #fffaf0;
+  --ink: #4a2a1a;
+  --grid: rgba(70, 95, 205, .22);
+  --periwinkle: #a9b8ec;
+  --lavender: #dcc6ee;
+  --coral: #ff8552;
+  --bu-orange: #f26a00;
+  --bu-navy: #12306b;
+  --muted: #7a5a48;
 }
 
 body {
-    background-color: var(--bu-light-bg);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    color: #333333;
+  font-family: 'Nunito', sans-serif; color: var(--ink);
+  background-color: var(--cream);
+  background-image:
+    linear-gradient(var(--grid) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, var(--grid) 1.5px, transparent 1.5px);
+  background-size: 30px 30px;
 }
+h1, h2, h3, .display-font { font-family: 'Bagel Fat One', cursive; font-weight: 400; letter-spacing: .3px; }
+:focus-visible { outline: 3px solid var(--bu-orange); outline-offset: 3px; }
 
-/* Brand Colors & Utilities */
-.text-bu-blue {
-    color: var(--bu-blue) !important;
-}
+/* ---------- Sticker look ---------- */
+.sticker { border: 2.5px solid var(--ink); border-radius: 1.5rem; background: var(--paper); box-shadow: 5px 5px 0 var(--ink); }
 
-.text-bu-orange {
-    color: var(--bu-orange) !important;
+.btn-ink {
+  background: var(--ink); color: #fff; border: 2.5px solid var(--ink); border-radius: 999px;
+  font-weight: 800; letter-spacing: .6px; text-transform: uppercase; font-size: .8rem; padding: .6rem 1.4rem;
+  transition: transform .12s, box-shadow .12s, background .12s;
 }
+.btn-ink:hover, .btn-ink:focus { background: var(--bu-orange); border-color: var(--ink); color: #fff; transform: translate(-2px,-2px); box-shadow: 3px 3px 0 var(--ink); }
+.btn-ink:disabled { opacity: .5; }
+.btn-ink-outline { background: #fff; color: var(--ink); }
+.btn-ink-outline:hover, .btn-ink-outline:focus { background: var(--lavender); color: var(--ink); }
+.btn-ink-danger { background: #c0392b; border-color: var(--ink); }
+.btn-ink-danger:hover, .btn-ink-danger:focus { background: #962d22; }
 
-.bg-bu-blue {
-    background-color: var(--bu-blue) !important;
-}
+/* ---------- Navbar ---------- */
+.site-nav { background: var(--paper); border: 2.5px solid var(--ink); border-radius: 999px; box-shadow: 4px 4px 0 var(--ink); }
+.brand-text { font-family: 'Bagel Fat One'; font-size: 1.6rem; color: var(--ink); line-height: 1; }
+.brand-text span { color: var(--bu-orange); }
+.site-nav .nav-link { color: var(--ink); font-weight: 800; font-size: .78rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 999px; padding: .45rem 1.1rem !important; }
+.site-nav .nav-link:hover { background: var(--lavender); }
+.site-nav .nav-link.active { background: var(--bu-orange); color: #fff; border: 2px solid var(--ink); }
 
-.bg-bu-orange {
-    background-color: var(--bu-orange) !important;
-}
+/* ---------- Page heading ---------- */
+.page-title { font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.05; }
+.page-title em { font-style: normal; color: var(--bu-orange); }
+.eyebrow { font-weight: 800; font-size: .75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
 
-/* Custom Primary Buttons */
-.btn-bu-primary {
-    background-color: var(--bu-orange);
-    color: white;
-    border-radius: 50px;
-    font-weight: 700;
-    border: none;
-    padding: 10px 24px;
-    transition: all 0.2s ease-in-out;
-}
+/* ---------- Badges / tags ---------- */
+.section-tag { font-weight: 800; font-size: .72rem; border: 2px solid var(--ink); border-radius: 999px; padding: .15rem .7rem; background: var(--cream); white-space: nowrap; display: inline-block; }
+.tag-sticker { font-weight: 800; font-size: .7rem; text-transform: uppercase; letter-spacing: .8px; border: 2px solid var(--ink); border-radius: 999px; padding: .15rem .7rem; background: #fff; display: inline-block; }
+.tag-open { background: #8ee6a3; } .tag-closed { background: #d9d2cc; } .tag-gcash { background: #7ec0ff; }
 
-.btn-bu-primary:hover {
-    background-color: #e05500;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.25);
-}
+/* ---------- Scalloped badge (SVG injected by app.js) ---------- */
+.scallop { position: relative; width: 92px; height: 92px; display: grid; place-items: center; }
+.scallop svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.scallop i, .scallop .scallop-text { position: relative; font-size: 2.1rem; color: var(--ink); }
+.scallop .scallop-text { font-family: 'Bagel Fat One'; font-size: 2rem; }
 
-/* Pill Navigation Styling */
-.pill-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+/* ---------- Forms ---------- */
+.form-label { font-weight: 800; font-size: .75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: .35rem; }
+.form-control, .form-select {
+  border: 2.5px solid var(--ink); border-radius: 1rem; background-color: #fff; color: var(--ink);
+  font-weight: 600; padding: .6rem 1rem;
 }
+.form-control::placeholder { color: #a08572; font-weight: 500; }
+.form-control:focus, .form-select:focus { border-color: var(--bu-orange); box-shadow: 0 0 0 .22rem rgba(242,106,0,.25); background-color: #fff; color: var(--ink); }
+.form-control:disabled, .form-control[readonly] { background-color: #f2e9d6; }
+.input-group > .form-control { border-radius: 1rem 0 0 1rem; }
+.input-group > .btn-toggle { border: 2.5px solid var(--ink); border-left: 0; border-radius: 0 1rem 1rem 0; background: var(--lavender); color: var(--ink); }
+.form-check-input { border: 2.5px solid var(--ink); width: 1.2em; height: 1.2em; }
+.form-check-input:checked { background-color: var(--bu-orange); border-color: var(--ink); }
+.form-switch .form-check-input { width: 2.6em; height: 1.4em; }
+.form-text { font-weight: 600; color: var(--muted); }
 
-.pill-nav a {
-    text-decoration: none;
-    color: var(--bu-blue);
-    font-weight: 600;
-    font-size: 0.9rem;
-    padding: 8px 18px;
-    border-radius: 50px;
-    transition: all 0.2s ease;
-}
+/* ---------- Tables ---------- */
+.table-sticker { --bs-table-bg: transparent; margin-bottom: 0; color: var(--ink); }
+.table-sticker thead th { background: var(--lavender); border-bottom: 2.5px solid var(--ink); font-size: .72rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; padding: .85rem 1rem; }
+.table-sticker td { padding: .85rem 1rem; vertical-align: middle; border-color: rgba(74,42,26,.18); font-weight: 600; }
+.btn-icon { width: 36px; height: 36px; padding: 0; border: 2px solid var(--ink); border-radius: 50%; background: #fff; color: var(--ink); display: inline-grid; place-items: center; transition: .12s; }
+.btn-icon:hover { background: var(--lavender); transform: translate(-1px,-1px); box-shadow: 2px 2px 0 var(--ink); }
+.btn-icon.danger:hover { background: #ffb4a8; }
 
-.pill-nav a:hover, 
-.pill-nav a.active {
-    background-color: var(--bu-orange);
-    color: #ffffff;
-}
+/* ---------- Modals ---------- */
+.modal-content.sticker .btn-close { filter: none; }
 
-/* Card Enhancements */
-.content-card, .stall-card {
-    background: #ffffff;
-    border-radius: 20px;
-    border: none;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+/* ---------- Colored bands with wavy top edge ---------- */
+.band { position: relative; padding: 4.5rem 0 4rem; margin-top: 4.5rem; border-top: 2.5px solid var(--ink); }
+.band .wave { position: absolute; left: 0; top: 0; width: 100%; height: 34px; transform: translateY(-99%); }
+.band-periwinkle { background: var(--periwinkle); color: var(--periwinkle); }
+.band-coral { background: var(--coral); color: var(--coral); }
+.band > .container { color: var(--ink); }
+.band h2 { font-size: 1.6rem; letter-spacing: 2px; text-transform: uppercase; font-family: 'Nunito'; font-weight: 800; }
+.feature { text-align: center; }
+.feature .scallop { width: 108px; height: 108px; margin: 0 auto .8rem; }
+.feature .scallop i { font-size: 2.4rem; }
+.feature p { font-weight: 700; margin: 0; font-size: .85rem; letter-spacing: 1px; text-transform: uppercase; }
 
-/* Form Focus States */
-.form-control:focus, 
-.form-select:focus {
-    border-color: var(--bu-orange);
-    box-shadow: 0 0 0 0.25rem rgba(255, 102, 0, 0.25);
-}
+/* ---------- Footer ---------- */
+.site-footer { background: var(--paper); border-top: 2.5px solid var(--ink); }
+.site-footer a { color: var(--ink); text-decoration: none; font-weight: 700; font-size: .78rem; letter-spacing: 1px; text-transform: uppercase; }
+.site-footer a:hover { color: var(--bu-orange); }
+
+/* ---------- Doodle stickers ---------- */
+.doodle { position: absolute; color: var(--ink); border: 2.5px solid var(--ink); border-radius: 50%; padding: .35rem .6rem; font-size: 2.4rem; pointer-events: none; }
+.doodle.d1 { top: -18px; left: 22px; transform: rotate(-14deg); background: var(--lavender); }
+.doodle.d2 { bottom: -22px; right: 40px; transform: rotate(12deg); background: var(--coral); }
+
+.page-wrap { min-height: calc(100vh - 260px); }

@@ -1,141 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - BU Hangout</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="./img/logo-favicon.png">
-    
-    <!-- Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css">
-    <style>
-        :root {
-            --bu-blue: #003366;
-            --bu-orange: #FF6600;
-        }
-
-        body {
-            background-color: #F8F9FA;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Outer Orange Frame Container */
-        .login-card-container {
-            background-color: var(--bu-orange);
-            padding: 12px;
-            border-radius: 28px;
-            max-width: 440px;
-            width: 100%;
-            margin: auto;
-        }
-
-        .login-card {
-            background-color: #ffffff;
-            border-radius: 20px;
-            padding: 2.5rem 2rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-        }
-
-        .login-brand-logo {
-            height: 48px;
-            width: auto;
-            object-fit: contain;
-        }
-
-        .btn-bu-primary {
-            background-color: var(--bu-orange);
-            color: white;
-            border-radius: 50px;
-            padding: 10px 24px;
-            font-weight: 700;
-            border: none;
-            box-shadow: 0 4px 14px rgba(255, 102, 0, 0.3);
-            transition: all 0.2s ease;
-        }
-
-        .btn-bu-primary:hover {
-            background-color: #e05500;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .form-control:focus {
-            border-color: var(--bu-orange);
-            box-shadow: 0 0 0 0.25rem rgba(255, 102, 0, 0.25);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | BU Hangout</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Header Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
-        <div class="container justify-content-between">
-            <a href="index.html" class="d-flex align-items-center gap-2 text-decoration-none">
-                <img src="./img/logo.png" alt="BU Hangout Logo" class="login-brand-logo" onerror="this.style.display='none'">
-                <span class="fw-bold fs-4" style="color: var(--bu-orange);">BU Hangout</span>
-            </a>
-            <a href="index.html" class="btn btn-outline-secondary btn-sm rounded-pill fw-bold px-3">← Back to Home</a>
-        </div>
+  <!-- ================= HEADER / NAVIGATION ================= -->
+  <div class="container pt-4">
+    <nav class="navbar navbar-expand-md site-nav px-3 px-md-4 py-2">
+      <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="index.html">
+        <img src="img/logo.png" alt="" height="42" onerror="this.style.display='none'">
+        <span class="brand-text">BU <span>Hangout</span></span>
+      </a>
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+              data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="bi bi-list fs-2"></i>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+        <ul class="navbar-nav gap-md-1 py-2 py-md-0 align-items-md-center">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard.html">Directory</a></li>
+          <li class="nav-item"><a class="nav-link active" href="login.html" aria-current="page">Login</a></li>
+          <li class="nav-item ms-md-2"><a class="btn btn-ink btn-sm" href="register.html">Register</a></li>
+        </ul>
+      </div>
     </nav>
+  </div>
 
-    <!-- Main Content Area -->
-    <main class="container d-flex align-items-center justify-content-center flex-grow-1 py-5">
-        
-        <div class="login-card-container shadow">
-            <div class="login-card text-center">
-                
-                <!-- Title & Subtitle -->
-                <h3 class="fw-bold mb-1" style="color: var(--bu-blue);">Welcome Back!</h3>
-                <p class="text-muted small mb-4">Sign in to access your BU Hangout dashboard</p>
+  <main class="container page-wrap d-flex align-items-center justify-content-center py-5">
+    <div class="col-12 col-md-8 col-lg-5">
+      <div class="sticker p-4 p-md-5 position-relative">
+        <i class="bi bi-mortarboard-fill doodle d1" aria-hidden="true"></i>
 
-                <!-- Login Form (Maps to User schema: email & password) -->
-                <form action="dashboard.html" method="GET" id="loginForm">
-                    <div class="mb-3 text-start">
-                        <label for="email" class="form-label small fw-bold text-secondary">Bicol University Email</label>
-                        <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="student@bicol-u.edu.ph" required>
-                    </div>
+        <div class="text-center mb-4">
+          <p class="eyebrow mb-1">Welcome back</p>
+          <h1 class="page-title">Log <em>in</em></h1>
+        </div>
 
-                    <div class="mb-3 text-start">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label for="password" class="form-label small fw-bold text-secondary mb-0">Password</label>
-                            <a href="#" class="small text-decoration-none" style="color: var(--bu-orange);">Forgot?</a>
-                        </div>
-                        <input type="password" class="form-control rounded-3 mt-1" id="password" name="password" placeholder="••••••••" required>
-                    </div>
+        <div class="alert alert-danger d-none fw-bold" id="loginError" role="alert"></div>
 
-                    <div class="form-check text-start mb-4">
-                        <input class="form-check-input" type="checkbox" id="rememberMe">
-                        <label class="form-check-label small text-muted" for="rememberMe">
-                            Remember me on this device
-                        </label>
-                    </div>
+        <form id="loginForm" action="#" method="POST" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="juan.delacruz@bicol-u.edu.ph" autocomplete="email" required>
+            <div class="invalid-feedback">Please enter a valid email.</div>
+          </div>
 
-                    <button type="submit" class="btn btn-bu-primary w-100 fw-bold py-2 mb-3">Sign In</button>
-                </form>
-
-                <div class="border-top pt-3">
-                    <p class="small text-muted mb-0">Don't have an account yet? <a href="register.html" class="fw-bold text-decoration-none" style="color: var(--bu-orange);">Create account</a></p>
-                </div>
-
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group has-validation">
+              <input type="password" class="form-control" id="password" name="password" placeholder="Your password" autocomplete="current-password" required>
+              <button type="button" class="btn btn-toggle" data-toggle-password="#password" aria-label="Show password"><i class="bi bi-eye"></i></button>
+              <div class="invalid-feedback">Please enter your password.</div>
             </div>
-        </div>
+          </div>
 
-    </main>
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" id="remember" name="remember">
+              <label class="form-check-label fw-bold small" for="remember">Remember me</label>
+            </div>
+            <a href="#" class="small fw-bold" style="color:var(--bu-orange)">Forgot password?</a>
+          </div>
 
-    <!-- Footer -->
-    <footer class="bg-white text-center py-3 border-top mt-auto">
-        <div class="container text-muted small">
-            © 2026 BU Hangout • Bicol University Polangui Campus
-        </div>
-    </footer>
+          <button type="submit" class="btn btn-ink w-100">Log in</button>
+        </form>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./js/app.js"></script>
+        <p class="text-center small fw-bold mt-4 mb-0">
+          New here? <a href="register.html" style="color:var(--bu-orange)">Create an account</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer py-3">
+    <div class="container text-center">
+      <small class="fw-bold" style="color:var(--muted)">&copy; 2026 Bicol University Polangui</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/login.js"></script>
 </body>
 </html>
