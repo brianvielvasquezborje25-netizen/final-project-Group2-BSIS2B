@@ -66,3 +66,17 @@ frontend/
 ├── dashboard.html         # Campus food stall directory & menu modals
 ├── manage-stall.html      # Stall owner dashboard & menu inventory manager
 └── profile.html           # Account settings & session management
+
+## Phase 5: Dashboard Integration & Search
+
+### **Overview**
+Phase 5 focuses on establishing live data synchronization between the frontend dashboard and the backend API, allowing student-run stalls and administrators to view dynamic user records and filter them in real time.
+
+### Key Features & Implementation
+-Dynamic Data Fetching: Connected `dashboard.html` and `dashboard.js` to the backend `/api/users` endpoint to pull and render registered MongoDB user documents dynamically.
+- Real-Time Search Filter: Implemented vanilla JavaScript filtering logic enabling users to instantly search through records by name or email.
+- Version Control & Tagging: Synchronized local and remote repository updates and tagged the release version with `phase-5` for structured tracking.
+
+### Tech Stack
+- Frontend: HTML5, CSS3, Bootstrap 5, Vanilla JavaScript (`fetch` API)
+- Backend: Node.js, Express, MongoDB Atlas, Mongoose
