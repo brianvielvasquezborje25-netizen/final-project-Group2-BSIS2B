@@ -15,11 +15,33 @@ exports.getAllUsers = async (req, res) => {
 // @route   POST /api/users
 exports.createUser = async (req, res) => {
   try {
-    const user = new User(req.body);
+    const normalizedEmail = String(req.body.email || '').trim().toLowerCase();
+
+    if (!normalizedEmail) {
+      return res.status(400).json({ message: 'Email is required.' });
+    }
+
+    const existingUser = await User.findOne({ email: normalizedEmail });
+    if (existingUser) {
+      return res.status(409).json({
+        message: 'This email is already registered to another account.'
+      });
+    }
+
+    const user = new User({
+      ...req.body,
+      email: normalizedEmail
+    });
+
     await user.save();
     res.status(201).json(user);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: 'This email is already registered to another account.'
+      });
+    }
+    res.status(400).json({ message: error.message, error: error.message });
   }
 };
 
