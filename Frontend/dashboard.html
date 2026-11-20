@@ -13,7 +13,7 @@
     :root {
       --cream: #fff1b8;
       --paper: #fffaf0;
-      --ink: #4a2a1a;            
+      --ink: #4a2a1a;
       --grid: rgba(70, 95, 205, .22);
       --periwinkle: #a9b8ec;
       --lavender: #dcc6ee;
@@ -24,9 +24,9 @@
     }
 
     body {
-      font-family: 'Nunito', sans-serif; color: var(--ink);
+      font-family: 'Nunito', sans-serif;
+      color: var(--ink);
       background-color: var(--cream);
-      /* graph-paper / notebook grid */
       background-image:
         linear-gradient(var(--grid) 1.5px, transparent 1.5px),
         linear-gradient(90deg, var(--grid) 1.5px, transparent 1.5px);
@@ -34,7 +34,7 @@
     }
     h1, h2, h3, .display-font { font-family: 'Bagel Fat One', cursive; font-weight: 400; letter-spacing: .3px; }
 
-    /* ---------- reusable "sticker" look ---------- */
+    /* ---------- Sticker & Buttons ---------- */
     .sticker { border: 2.5px solid var(--ink); border-radius: 1.5rem; background: var(--paper); box-shadow: 5px 5px 0 var(--ink); }
     .btn-ink {
       background: var(--ink); color: #fff; border: 2.5px solid var(--ink); border-radius: 999px;
@@ -43,10 +43,14 @@
     }
     .btn-ink:hover, .btn-ink:focus { background: var(--bu-orange); border-color: var(--ink); color: #fff; transform: translate(-2px,-2px); box-shadow: 3px 3px 0 var(--ink); }
     .btn-ink:disabled { opacity: .5; }
+    .btn-ink-outline { background: #fff; color: var(--ink); }
+    .btn-ink-outline:hover { background: var(--lavender); color: var(--ink); }
+    .btn-ink-danger { background: #c92a2a; border-color: var(--ink); color: #fff; }
+    .btn-ink-danger:hover { background: #a61e1e; border-color: var(--ink); color: #fff; }
 
     /* ---------- Navbar ---------- */
     .site-nav { background: var(--paper); border: 2.5px solid var(--ink); border-radius: 999px; box-shadow: 4px 4px 0 var(--ink); }
-    .brand-text { font-family: 'Bagel Fat One'; font-size: 1.6rem; color: var(--ink); line-height: 1; }
+    .brand-text { font-family: 'Bagel Fat One', cursive; font-size: 1.6rem; color: var(--ink); line-height: 1; }
     .brand-text span { color: var(--bu-orange); }
     .site-nav .nav-link { color: var(--ink); font-weight: 800; font-size: .78rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 999px; padding: .45rem 1.1rem !important; }
     .site-nav .nav-link:hover { background: var(--lavender); }
@@ -58,6 +62,7 @@
     .hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.05; color: var(--ink); }
     .hero h1 em { font-style: normal; color: var(--bu-orange); }
     .campus-pill { display: inline-block; background: #ffc61a; border: 2px solid var(--ink); border-radius: 999px; font-weight: 800; font-size: .72rem; padding: .2rem .8rem; }
+    .user-pill { display: inline-block; background: var(--lavender); border: 2px solid var(--ink); border-radius: 999px; font-weight: 800; font-size: .72rem; padding: .2rem .8rem; }
 
     .search-wrap { background: #fff; border: 2.5px solid var(--ink); border-radius: 999px; padding: .3rem; display: flex; align-items: center; }
     .search-wrap input { border: 0; box-shadow: none; background: transparent; font-weight: 600; }
@@ -71,7 +76,7 @@
     .filter-chip.active { background: var(--periwinkle); box-shadow: 3px 3px 0 var(--ink); }
 
     .doodle { position: absolute; font-size: 2.2rem; color: var(--ink); opacity: .9; pointer-events: none; }
-    .doodle.d1 { top: -18px; left: 22px;  transform: rotate(-14deg); font-size: 2.6rem; background: var(--lavender); border: 2.5px solid var(--ink); border-radius: 50%; padding: .35rem .6rem; }
+    .doodle.d1 { top: -18px; left: 22px; transform: rotate(-14deg); font-size: 2.6rem; background: var(--lavender); border: 2.5px solid var(--ink); border-radius: 50%; padding: .35rem .6rem; }
     .doodle.d2 { bottom: -22px; right: 40px; transform: rotate(12deg); font-size: 2.4rem; background: var(--coral); border: 2.5px solid var(--ink); border-radius: 50%; padding: .35rem .6rem; }
 
     /* ---------- Scrolling ribbon ---------- */
@@ -89,8 +94,10 @@
     .stall-card { overflow: hidden; height: 100%; transition: transform .15s, box-shadow .15s; display: flex; flex-direction: column; }
     .stall-card:hover { transform: translate(-3px,-3px); box-shadow: 8px 8px 0 var(--ink); }
     .cover { height: 150px; position: relative; display: flex; align-items: center; justify-content: center; border-bottom: 2.5px solid var(--ink); }
-    .cover-0 { background: var(--lavender); } .cover-1 { background: var(--coral); }
-    .cover-2 { background: var(--periwinkle); } .cover-3 { background: #ffd966; }
+    .cover-0 { background: var(--lavender); }
+    .cover-1 { background: var(--coral); }
+    .cover-2 { background: var(--periwinkle); }
+    .cover-3 { background: #ffd966; }
 
     .scallop { position: relative; width: 92px; height: 92px; display: grid; place-items: center; }
     .scallop svg { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -109,6 +116,10 @@
     .stall-name { font-size: 1.45rem; line-height: 1.1; }
     .section-tag { font-weight: 800; font-size: .72rem; border: 2px solid var(--ink); border-radius: 999px; padding: .15rem .7rem; background: var(--cream); white-space: nowrap; }
 
+    /* ---------- User directory cards (Admin only) ---------- */
+    .user-card { border: 2.5px solid var(--ink); border-radius: 1.25rem; background: var(--paper); box-shadow: 4px 4px 0 var(--ink); height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+    .role-badge { font-weight: 800; font-size: .7rem; text-transform: uppercase; letter-spacing: .6px; border: 2px solid var(--ink); border-radius: 999px; padding: .15rem .65rem; background: #bfe3ff; display: inline-block; }
+
     .empty-state { padding: 3rem 1rem; }
 
     /* ---------- Colored bands with wavy edge ---------- */
@@ -117,7 +128,7 @@
     .band-periwinkle { background: var(--periwinkle); color: var(--periwinkle); }
     .band-coral { background: var(--coral); color: var(--coral); margin-top: 4.5rem; }
     .band > .container { color: var(--ink); }
-    .band h2 { font-size: 1.6rem; letter-spacing: 2px; text-transform: uppercase; font-family: 'Nunito'; font-weight: 800; }
+    .band h2 { font-size: 1.6rem; letter-spacing: 2px; text-transform: uppercase; font-family: 'Nunito', sans-serif; font-weight: 800; }
     .feature { text-align: center; }
     .feature .scallop { width: 108px; height: 108px; margin: 0 auto .8rem; }
     .feature .scallop i { font-size: 2.4rem; }
@@ -148,7 +159,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="mainNav">
         <ul class="navbar-nav gap-md-1 py-2 py-md-0">
           <li class="nav-item"><a class="nav-link active" href="dashboard.html" aria-current="page">Directory</a></li>
-          <li class="nav-item"><a class="nav-link" href="my-stall.html">My Stall</a></li>
+          <li class="nav-item d-none" id="navMyStall"><a class="nav-link" href="ManageStall.html">My Stall</a></li>
           <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
           <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</a></li>
         </ul>
@@ -165,10 +176,13 @@
 
       <div class="row align-items-center g-4">
         <div class="col-lg-6">
-          <span class="campus-pill mb-3">Bicol University Polangui</span>
-          <p class="hero-eyebrow mb-1">Student-run &middot; Campus-fresh</p>
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="campus-pill">Bicol University Polangui</span>
+            <span class="user-pill d-none" id="welcomeUserBadge"></span>
+          </div>
+          <p class="hero-eyebrow mb-1">Student-run · Campus-fresh</p>
           <h1 class="mb-3">Campus Entrep <em>Food Hub</em></h1>
-          <p class="mb-0 fw-semibold" style="color:var(--muted)">Browse student-run food stalls, check live open statuses, and view daily menus.</p>
+          <p class="mb-0 fw-semibold" style="color:var(--muted)" id="heroSubtitle">Browse student-run food stalls, check live open statuses, and view daily menus.</p>
         </div>
 
         <div class="col-lg-6">
@@ -176,7 +190,7 @@
             <div class="search-wrap">
               <i class="bi bi-search ms-3" aria-hidden="true"></i>
               <label for="searchInput" class="visually-hidden">Search stalls</label>
-              <input type="search" class="form-control" id="searchInput" name="q" placeholder="Search stall name or section (e.g., BSIS 2B)...">
+              <input type="search" class="form-control" id="searchInput" name="q" placeholder="Search stall name or section (e.g., BS ENTREP)...">
               <button type="submit" class="btn btn-ink">Search</button>
             </div>
           </form>
@@ -197,16 +211,44 @@
       </div>
     </div>
 
-        <!-- ==================== REGISTERED USERS SECTION ==================== -->
-    <section class="mb-5">
-        <h2 class="h3 mb-3 font-weight-bold">Registered Users (Database)</h2>
-        <div class="row g-3" id="userList">
-            <!-- Dynamic user cards will populate here -->
+    <!-- ================= SELLER MANAGE STALL & MEALS PANEL (SELLER ONLY) ================= -->
+    <section aria-labelledby="sellerPanelTitle" id="sellerManageSection" class="mb-5 d-none">
+      <div class="sticker p-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+          <div>
+            <h2 class="h3 mb-1" id="sellerPanelTitle">Manage Your Stall & Meals</h2>
+            <p class="small fw-semibold mb-0" style="color:var(--muted)">Add a meal, update prices, or toggle your stall's open status.</p>
+          </div>
+          <a href="ManageStall.html" class="btn btn-ink btn-ink-outline btn-sm">Open Manage My Stall</a>
         </div>
+
+        <form id="addMealForm" class="row g-3 align-items-end">
+          <div class="col-md-3">
+            <label for="sellerStallSelect" class="form-label fw-bold small">Select Stall</label>
+            <select id="sellerStallSelect" class="form-select fw-bold" style="border:2px solid var(--ink);border-radius:.75rem"></select>
+          </div>
+          <div class="col-md-3">
+            <label for="mealNameInput" class="form-label fw-bold small">Meal Name</label>
+            <input type="text" id="mealNameInput" class="form-control" placeholder="e.g., Cheesy Sisig" required style="border:2px solid var(--ink);border-radius:.75rem">
+          </div>
+          <div class="col-md-2">
+            <label for="mealCategoryInput" class="form-label fw-bold small">Category</label>
+            <input type="text" id="mealCategoryInput" class="form-control" value="Meal" required style="border:2px solid var(--ink);border-radius:.75rem">
+          </div>
+          <div class="col-md-2">
+            <label for="mealPriceInput" class="form-label fw-bold small">Price (₱)</label>
+            <input type="number" id="mealPriceInput" class="form-control" min="1" step="0.5" placeholder="65" required style="border:2px solid var(--ink);border-radius:.75rem">
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-ink w-100">Add Meal</button>
+          </div>
+        </form>
+        <div id="sellerFeedback" class="small fw-bold mt-2"></div>
+      </div>
     </section>
 
-    <!-- ================= DIRECTORY ================= -->
-    <section aria-labelledby="dirTitle">
+    <!-- ================= STALL DIRECTORY ================= -->
+    <section aria-labelledby="dirTitle" class="mb-5">
       <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
         <div>
           <h2 class="h1 mb-1" id="dirTitle">Today's Stalls</h2>
@@ -229,12 +271,30 @@
         <i class="bi bi-emoji-frown fs-1 d-block mb-2"></i>
         <h2 class="h3">No stalls found</h2>
         <p class="mb-3 fw-semibold">Try a different keyword or clear the filters.</p>
-        <button class="btn btn-ink" id="clearFilters">Clear filters</button>
+        <button type="button" class="btn btn-ink" id="clearFilters">Clear filters</button>
       </div>
     </section>
+
+    <!-- ================= REGISTERED USERS SECTION (ADMIN ONLY) ================= -->
+    <section aria-labelledby="usersTitle" id="registeredUsersSection" class="mb-5 d-none">
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+        <div>
+          <h2 class="h2 mb-1" id="usersTitle">Registered Users (Admin)</h2>
+          <p class="mb-0 fw-bold small" style="color:var(--muted)" id="userCount">Loading registered users...</p>
+        </div>
+        <div class="search-wrap" style="min-width: 260px;">
+          <i class="bi bi-person-search ms-3" aria-hidden="true"></i>
+          <label for="userSearchInput" class="visually-hidden">Search registered users</label>
+          <input type="search" class="form-control form-control-sm" id="userSearchInput" placeholder="Search name, email, or role...">
+        </div>
+      </div>
+
+      <div class="row g-3" id="userList"></div>
+    </section>
+
   </main>
 
-  <!-- ================= WHY BU HANGOUT (blue band) ================= -->
+  <!-- ================= WHY BU HANGOUT ================= -->
   <section class="band band-periwinkle" aria-labelledby="whyTitle">
     <svg class="wave" viewBox="0 0 1440 34" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 34V18 Q60 0 120 18 T240 18 T360 18 T480 18 T600 18 T720 18 T840 18 T960 18 T1080 18 T1200 18 T1320 18 T1440 18V34Z"/></svg>
     <div class="container">
@@ -248,13 +308,13 @@
     </div>
   </section>
 
-  <!-- ================= RUN A STALL (coral band) ================= -->
-  <section class="band band-coral" aria-labelledby="runTitle">
+  <!-- ================= RUN A STALL (SELLER ONLY) ================= -->
+  <section class="band band-coral d-none" id="sellerCtaBand" aria-labelledby="runTitle">
     <svg class="wave" viewBox="0 0 1440 34" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 34V18 Q60 0 120 18 T240 18 T360 18 T480 18 T600 18 T720 18 T840 18 T960 18 T1080 18 T1200 18 T1320 18 T1440 18V34Z"/></svg>
     <div class="container text-center">
       <h2 class="mb-3" id="runTitle">Running a stall?</h2>
       <p class="fw-bold mb-4">Update your hours, post today's menu, and switch your status to Open.</p>
-      <a href="my-stall.html" class="btn btn-ink">Go to My Stall</a>
+      <a href="ManageStall.html" class="btn btn-ink">Go to My Stall</a>
     </div>
   </section>
 
@@ -263,13 +323,15 @@
     <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
       <span class="brand-text">BU <span>Hangout</span></span>
       <nav class="d-flex gap-4" aria-label="Footer">
-        <a href="dashboard.html">Directory</a><a href="my-stall.html">My Stall</a><a href="profile.html">Profile</a>
+        <a href="dashboard.html">Directory</a>
+        <a href="ManageStall.html" class="d-none" id="footerMyStall">My Stall</a>
+        <a href="profile.html">Profile</a>
       </nav>
-      <small class="fw-bold" style="color:var(--muted)">&copy; 2026 Bicol University Polangui</small>
+      <small class="fw-bold" style="color:var(--muted)">© 2026 Bicol University Polangui</small>
     </div>
   </footer>
 
-  <!-- ================= MODALS (placeholders) ================= -->
+  <!-- ================= MENU MODAL ================= -->
   <div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content sticker">
@@ -279,8 +341,8 @@
         </div>
         <div class="modal-body">
           <p class="fw-bold mb-3" style="color:var(--muted)" id="menuModalMeta"></p>
-          <div class="p-3 rounded-4 fw-semibold" style="border:2px dashed var(--ink); background:var(--cream)">
-            Menu items will load here from the API during backend integration.
+          <div id="menuModalBody" class="p-3 rounded-4 fw-semibold" style="border:2px dashed var(--ink); background:var(--cream)">
+            Loading menu items...
           </div>
         </div>
         <div class="modal-footer border-0">
@@ -290,15 +352,16 @@
     </div>
   </div>
 
+  <!-- ================= LOGOUT MODAL ================= -->
   <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
       <div class="modal-content sticker">
         <div class="modal-body text-center p-4">
           <i class="bi bi-box-arrow-right fs-1"></i>
           <h2 class="h3 mt-2" id="logoutTitle">Log out?</h2>
-          <p class="small fw-semibold">You'll need to sign in again to manage your stall.</p>
+          <p class="small fw-semibold">You'll need to sign in again to continue.</p>
           <form action="#" method="POST" id="logoutForm" class="d-flex gap-2 justify-content-center">
-            <button type="button" class="btn btn-ink" style="background:#fff;color:var(--ink)" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-ink btn-ink-outline" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-ink">Logout</button>
           </form>
         </div>
@@ -308,46 +371,108 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    /* Sample data: replace with fetch('/api/stalls') during backend integration.
-       Fields mirror the Stall table: name, section, hours, is_open, accepts_gcash */
-    const stalls = [
-      { id: 1, name: 'The Daily Crave', section: 'BS ENTREP', hours: '8:30 AM - 4:30 PM', isOpen: true,  gcash: true, icon: 'bi-cup-hot-fill' },
-      { id: 2, name: 'Ferris Meal',     section: 'BS ENTREP', hours: '9:00 AM - 5:00 PM', isOpen: true,  gcash: true, icon: 'bi-egg-fried' },
-      { id: 3, name: 'Wrap & Zest',     section: 'BS ENTREP', hours: '8:00 AM - 3:00 PM', isOpen: false, gcash: true, icon: 'bi-basket2-fill' },
-      { id: 4, name: 'Sip&sizzle',      section: 'BS ENTREP', hours: '8:30 AM - 4:30 PM', isOpen: true,  gcash: true, icon: 'bi-cup-hot-fill' },
-      { id: 5, name: "Mack's",          section: 'BS ENTREP', hours: '9:00 AM - 5:00 PM', isOpen: true,  gcash: true, icon: 'bi-egg-fried' },
-      { id: 6, name: 'Anum',            section: 'BS ENTREP', hours: '8:00 AM - 3:00 PM', isOpen: false, gcash: true, icon: 'bi-basket2-fill' },
+    const API_BASE_URL = "http://localhost:5000";
 
+    const FALLBACK_STALLS = [
+      { id: "1", name: "The Daily Crave", section: "BS ENTREP", hours: "8:30 AM - 4:30 PM", isOpen: true,  gcash: true, icon: "bi-cup-hot-fill" },
+      { id: "2", name: "Ferris Meal",     section: "BS ENTREP", hours: "9:00 AM - 5:00 PM", isOpen: true,  gcash: true, icon: "bi-egg-fried" },
+      { id: "3", name: "Wrap & Zest",     section: "BS ENTREP", hours: "8:00 AM - 3:00 PM", isOpen: false, gcash: true, icon: "bi-basket2-fill" },
+      { id: "4", name: "Sip&sizzle",      section: "BS ENTREP", hours: "8:30 AM - 4:30 PM", isOpen: true,  gcash: true, icon: "bi-cup-hot-fill" },
+      { id: "5", name: "Mack's",          section: "BS ENTREP", hours: "9:00 AM - 5:00 PM", isOpen: true,  gcash: true, icon: "bi-egg-fried" },
+      { id: "6", name: "Anum",            section: "BS ENTREP", hours: "8:00 AM - 3:00 PM", isOpen: false, gcash: true, icon: "bi-basket2-fill" }
     ];
 
-    const state = { query: '', filter: 'all', sort: 'open' };
-    const grid = document.getElementById('stallGrid');
-    const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const STALL_ICONS = ["bi-cup-hot-fill", "bi-egg-fried", "bi-basket2-fill", "bi-shop"];
+    let stalls = [...FALLBACK_STALLS];
+    let allUsers = [];
+    let currentUser = null;
+    let userRole = "";
 
-    /* Scalloped (wavy-edge) badge, like the inspiration's stickers */
+    const state = { query: "", filter: "all", sort: "open" };
+    const grid = document.getElementById("stallGrid");
+
+   const ESC_MAP = {};
+    ESC_MAP[String.fromCharCode(38)] = "&";
+    ESC_MAP[String.fromCharCode(60)] = "<";
+    ESC_MAP[String.fromCharCode(62)] = ">";
+    ESC_MAP[String.fromCharCode(34)] = "&" + "quot;";
+    ESC_MAP[String.fromCharCode(39)] = "&" + "#39;";
+
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, ch => ESC_MAP[ch] || ch);
+    }
+
+    function getCurrentUser() {
+      const raw = localStorage.getItem("bu_hangout_user") || sessionStorage.getItem("bu_hangout_user");
+      if (!raw) return null;
+      try {
+        return JSON.parse(raw);
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function logoutUser() {
+      localStorage.removeItem("bu_hangout_user");
+      sessionStorage.removeItem("bu_hangout_user");
+      window.location.href = "login.html";
+    }
+
     function scallopSVG(fill) {
       const n = 12, cx = 50, cy = 50, r = 42, amp = 5, pts = [];
       for (let i = 0; i <= 240; i++) {
-        const a = (i / 240) * Math.PI * 2, rr = r + amp * Math.sin(a * n);
-        pts.push((cx + rr * Math.cos(a)).toFixed(2) + ',' + (cy + rr * Math.sin(a)).toFixed(2));
+        const a = (i / 240) * Math.PI * 2;
+        const rr = r + amp * Math.sin(a * n);
+        pts.push((cx + rr * Math.cos(a)).toFixed(2) + "," + (cy + rr * Math.sin(a)).toFixed(2));
       }
-      return `<svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="${pts.join(' ')}" fill="${fill}" stroke="#4a2a1a" stroke-width="2.5" stroke-linejoin="round"/></svg>`;
+      return `<svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="${pts.join(" ")}" fill="${fill}" stroke="#4a2a1a" stroke-width="2.5" stroke-linejoin="round"/></svg>`;
     }
+
     function decorateScallops(root = document) {
-      root.querySelectorAll('.scallop:not([data-done])').forEach(el => {
-        el.insertAdjacentHTML('afterbegin', scallopSVG(el.dataset.fill || '#fffaf0'));
-        el.dataset.done = '1';
+      root.querySelectorAll(".scallop:not([data-done])").forEach(el => {
+        el.insertAdjacentHTML("afterbegin", scallopSVG(el.dataset.fill || "#fffaf0"));
+        el.dataset.done = "1";
       });
     }
 
+    function normalizeStall(raw, idx) {
+      return {
+        id: String(raw._id || raw.id || idx + 1),
+        ownerId: raw.ownerId || "",
+        name: raw.stallName || raw.name || "Unnamed Stall",
+        section: raw.section || raw.courseSection || "BS ENTREP",
+        hours: raw.operatingHours || raw.hours || "8:00 AM - 5:00 PM",
+        isOpen: Boolean(raw.isOpen ?? raw.is_open ?? true),
+        gcash: Boolean(raw.gcashAvailable ?? raw.gcash ?? raw.accepts_gcash ?? true),
+        icon: raw.icon || STALL_ICONS[idx % STALL_ICONS.length]
+      };
+    }
+
+    function populateSellerStallSelect() {
+      const select = document.getElementById("sellerStallSelect");
+      if (!select || userRole !== "seller") return;
+      const myId = currentUser?._id || currentUser?.id || "";
+      const owned = stalls.filter(s => myId && String(s.ownerId) === String(myId));
+      const pool = owned.length > 0 ? owned : stalls;
+      select.innerHTML = pool.map(s => `<option value="${esc(s.id)}">${esc(s.name)} (${s.isOpen ? "Open" : "Closed"})</option>`).join("");
+    }
+
     function cardHTML(s, i) {
+      const canToggle = userRole === "seller" && (!s.ownerId || String(s.ownerId) === String(currentUser?._id || currentUser?.id || ""));
+      const sellerActions = canToggle ? `
+        <div class="d-flex gap-2 mt-2">
+          <button type="button" class="btn btn-ink btn-ink-outline flex-fill toggle-stall" data-id="${esc(s.id)}">
+            ${s.isOpen ? "Set Closed" : "Set Open"}
+          </button>
+        </div>` : "";
+
       return `
       <div class="col-12 col-md-6 col-xl-4">
-        <article class="stall-card sticker ${s.isOpen ? '' : 'is-closed'}">
+        <article class="stall-card sticker ${s.isOpen ? "" : "is-closed"}">
           <div class="cover cover-${i % 4}">
-            <span class="tag-sticker tag-status ${s.isOpen ? 'open' : 'closed'}">${s.isOpen ? 'Open' : 'Closed'}</span>
-            ${s.gcash ? '<span class="tag-sticker tag-gcash">GCash</span>' : ''}
-            <div class="scallop" data-fill="#fffaf0"><i class="bi ${s.icon}" aria-hidden="true"></i></div>
+            <span class="tag-sticker tag-status ${s.isOpen ? "open" : "closed"}">${s.isOpen ? "Open" : "Closed"}</span>
+            ${s.gcash ? '<span class="tag-sticker tag-gcash">GCash</span>' : ""}
+            <div class="scallop" data-fill="#fffaf0"><i class="bi ${esc(s.icon)}" aria-hidden="true"></i></div>
           </div>
           <div class="p-4 d-flex flex-column flex-grow-1">
             <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
@@ -355,126 +480,381 @@
               <span class="section-tag">${esc(s.section)}</span>
             </div>
             <p class="fw-bold small mb-4" style="color:var(--muted)"><i class="bi bi-clock me-1"></i>${esc(s.hours)}</p>
-            <button type="button" class="btn btn-ink w-100 mt-auto view-menu" data-id="${s.id}">View Menu</button>
+            <button type="button" class="btn btn-ink w-100 mt-auto view-menu" data-id="${esc(s.id)}">View Menu</button>
+            ${sellerActions}
           </div>
         </article>
       </div>`;
     }
 
-    function render() {
+    function renderStalls() {
       const q = state.query.trim().toLowerCase();
-      const list = stalls.filter(s =>
-        (!q || s.name.toLowerCase().includes(q) || s.section.toLowerCase().includes(q)) &&
-        (state.filter === 'all' || (state.filter === 'open' && s.isOpen) || (state.filter === 'gcash' && s.gcash))
-      ).sort((a, b) =>
-        state.sort === 'name'    ? a.name.localeCompare(b.name) :
-        state.sort === 'section' ? a.section.localeCompare(b.section) :
-        (b.isOpen - a.isOpen) || a.name.localeCompare(b.name)
-      );
+      const list = stalls
+        .filter(s =>
+          (!q || s.name.toLowerCase().includes(q) || s.section.toLowerCase().includes(q)) &&
+          (state.filter === "all" || (state.filter === "open" && s.isOpen) || (state.filter === "gcash" && s.gcash))
+        )
+        .sort((a, b) =>
+          state.sort === "name" ? a.name.localeCompare(b.name) :
+          state.sort === "section" ? a.section.localeCompare(b.section) :
+          (Number(b.isOpen) - Number(a.isOpen)) || a.name.localeCompare(b.name)
+        );
 
-      grid.innerHTML = list.map(cardHTML).join('');
+      grid.innerHTML = list.map(cardHTML).join("");
       decorateScallops(grid);
-      document.getElementById('emptyState').classList.toggle('d-none', list.length > 0);
-      document.getElementById('resultCount').textContent = `Showing ${list.length} stall${list.length === 1 ? '' : 's'}`;
+      document.getElementById("emptyState").classList.toggle("d-none", list.length > 0);
+      document.getElementById("resultCount").textContent = `Showing ${list.length} stall${list.length === 1 ? "" : "s"}`;
+      populateSellerStallSelect();
     }
 
-    // Ribbon text (duplicated for a seamless loop)
-    const ribbonItems = ['Student-run', 'Open now', 'GCash accepted', 'Fresh daily', 'BU Polangui'];
-    const ribbonHTML = ribbonItems.map(t => `<span>${t}</span><span>&#9733;</span>`).join('');
-    document.getElementById('ribbonTrack').innerHTML = ribbonHTML.repeat(6);
+    function renderUsers(usersToRender) {
+      if (userRole !== "admin") return;
+      const userListContainer = document.getElementById("userList");
+      const userCountEl = document.getElementById("userCount");
+      if (!userListContainer) return;
 
-    // Events
-    document.getElementById('searchForm').addEventListener('submit', e => { e.preventDefault(); state.query = document.getElementById('searchInput').value; render(); });
-    document.getElementById('searchInput').addEventListener('input', e => { state.query = e.target.value; render(); });
+      if (!Array.isArray(usersToRender) || usersToRender.length === 0) {
+        userListContainer.innerHTML = `<div class="col-12"><p class="fw-bold mb-0" style="color:var(--muted)">No matching users found.</p></div>`;
+        if (userCountEl) userCountEl.textContent = "0 users shown";
+        return;
+      }
 
-    document.getElementById('filterChips').addEventListener('click', e => {
-      const chip = e.target.closest('.filter-chip'); if (!chip) return;
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active'); state.filter = chip.dataset.filter; render();
-    });
+      if (userCountEl) {
+        userCountEl.textContent = `Showing ${usersToRender.length} registered user${usersToRender.length === 1 ? "" : "s"}`;
+      }
 
-    document.getElementById('sortSelect').addEventListener('change', e => { state.sort = e.target.value; render(); });
+      userListContainer.innerHTML = usersToRender.map(u => {
+        const id = u._id || u.id || "";
+        const name = u.name || u.username || "Unknown";
+        const email = u.email || "No email";
+        const role = u.role || "Consumer";
+        return `
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="user-card p-3">
+              <div>
+                <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                  <h3 class="h5 mb-0" style="font-family:'Nunito',sans-serif;font-weight:800;">${esc(name)}</h3>
+                  <span class="role-badge">${esc(role)}</span>
+                </div>
+                <p class="small fw-semibold mb-3" style="color:var(--muted)">${esc(email)}</p>
+              </div>
+              <div>
+                <button type="button" class="btn btn-ink btn-ink-danger btn-sm w-100 delete-user-btn" data-id="${esc(id)}" data-email="${esc(email)}">
+                  <i class="bi bi-trash3 me-1"></i>Delete User
+                </button>
+              </div>
+            </div>
+          </div>`;
+      }).join("");
+    }
 
-    document.getElementById('clearFilters').addEventListener('click', () => {
-      state.query = ''; state.filter = 'all';
-      document.getElementById('searchInput').value = '';
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter === 'all'));
-      render();
-    });
+    async function deleteUser(userId, email) {
+      if (userRole !== "admin") return;
+      if (!confirm(`Delete user "${email}"? This cannot be undone.`)) return;
+      try {
+        if (userId) {
+          const res = await fetch(`${API_BASE_URL}/api/users/${userId}`, { method: "DELETE" });
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.message || errData.error || "Failed to delete user.");
+          }
+        }
+        allUsers = allUsers.filter(u => String(u._id || u.id || "") !== String(userId) && u.email !== email);
+        renderUsers(allUsers);
+      } catch (err) {
+        console.error("Failed to delete user:", err);
+        alert(err.message || "Could not delete user on server.");
+      }
+    }
 
-    grid.addEventListener('click', e => {
-      const btn = e.target.closest('.view-menu'); if (!btn) return;
-      const s = stalls.find(x => x.id === Number(btn.dataset.id));
-      document.getElementById('menuModalTitle').textContent = s.name + ' Menu';
-      document.getElementById('menuModalMeta').textContent = `${s.section} · ${s.hours} · ${s.isOpen ? 'Open' : 'Closed'}`;
-      new bootstrap.Modal(document.getElementById('menuModal')).show();
-    });
+    async function loadStallsFromApi() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/stalls`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const rawList = Array.isArray(data) ? data : Array.isArray(data.stalls) ? data.stalls : [];
+        if (rawList.length > 0) {
+          stalls = rawList.map(normalizeStall);
+          renderStalls();
+        }
+      } catch (_) {}
+    }
 
-    decorateScallops();
-    render();
-  </script>
+    async function loadUsersFromApi() {
+      if (userRole !== "admin") return;
+      const userListContainer = document.getElementById("userList");
+      const userCountEl = document.getElementById("userCount");
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/users`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        allUsers = Array.isArray(data) ? data : Array.isArray(data.users) ? data.users : [];
+        renderUsers(allUsers);
+      } catch (err) {
+        console.error("Error fetching users:", err);
+        if (userCountEl) userCountEl.textContent = "Unable to reach server";
+        if (userListContainer) {
+          userListContainer.innerHTML = `<div class="col-12"><p class="text-danger fw-bold mb-0">Failed to load users from the server.</p></div>`;
+        }
+      }
+    }
 
-  <div class="container mb-4">
-    <input type="text" id="userSearchInput" class="form-control" placeholder="Search registered users by name...">
-  </div>
+    async function openMenuModal(stall) {
+      document.getElementById("menuModalTitle").textContent = `${stall.name} Menu`;
+      document.getElementById("menuModalMeta").textContent = `${stall.section} · ${stall.hours} · ${stall.isOpen ? "Open" : "Closed"}`;
+      const bodyEl = document.getElementById("menuModalBody");
+      bodyEl.innerHTML = "Loading menu items...";
 
-  <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-        const userListContainer = document.getElementById("userList");
-        const searchInput = document.getElementById("userSearchInput");
-        if (!userListContainer) return;
+      const modal = new bootstrap.Modal(document.getElementById("menuModal"));
+      modal.show();
 
-        let allUsers = []; // Store users globally for filtering
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/menu?stallId=${encodeURIComponent(stall.id)}`);
+        if (!res.ok) throw new Error("Menu fetch failed");
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : Array.isArray(data.menus) ? data.menus : [];
 
-        // Function to render user cards
-        function renderUsers(usersToRender) {
-            userListContainer.innerHTML = "";
+        if (items.length === 0) {
+          bodyEl.textContent = "No menu items posted for this stall yet.";
+          return;
+        }
 
-            if (usersToRender.length === 0) {
-                userListContainer.innerHTML = "<p class='text-muted'>No matching users found.</p>";
-                return;
-            }
+        bodyEl.innerHTML = items.map((item, index) => {
+          const itemName = item.itemName || item.name || "Menu Item";
+          const priceVal = Number(item.price ?? 0);
+          const availBadge = item.isAvailable === false
+            ? `<span class="badge bg-secondary ms-2">Unavailable</span>`
+            : `<span class="badge bg-success ms-2">Available</span>`;
 
-            usersToRender.forEach(user => {
-                const userName = user.name || user.username || "Unknown";
-                const userCard = `
-                    <div class="col-md-4 mb-3">
-                        <div class="card p-3 shadow-sm border-0">
-                            <h5 class="card-title text-dark font-weight-bold">${userName}</h5>
-                            <p class="card-text text-muted mb-1"><strong>Email:</strong> ${user.email}</p>
-                            <p class="card-text"><span class="badge bg-primary">Registered User</span></p>
-                        </div>
-                    </div>
-                `;
-                userListContainer.innerHTML += userCard;
+          const priceControls = userRole === "seller" ? `
+            <div class="d-flex align-items-center gap-1">
+              <input type="number" step="0.5" min="0" class="form-control form-control-sm price-input"
+                     style="width:85px;border:2px solid var(--ink)" value="${esc(priceVal)}" aria-label="Price for ${esc(itemName)}">
+              <button type="button" class="btn btn-ink btn-sm save-price-btn" data-id="${esc(item._id || item.id || "")}" data-index="${index}">
+                Save
+              </button>
+            </div>` : `<span class="fw-bold">₱${priceVal.toFixed(2)}</span>`;
+
+          return `
+            <div class="d-flex justify-content-between align-items-center gap-2 py-2 border-bottom border-dark">
+              <div>
+                <span class="fw-bold">${esc(itemName)}</span>
+                ${availBadge}
+                <div class="small" style="color:var(--muted)">${esc(item.category || "Meal")}</div>
+              </div>
+              ${priceControls}
+            </div>`;
+        }).join("");
+
+        if (userRole === "seller") {
+          bodyEl.querySelectorAll(".save-price-btn").forEach(btn => {
+            btn.addEventListener("click", async () => {
+              const itemId = btn.dataset.id;
+              const idx = Number(btn.dataset.index);
+              const row = btn.closest("div.d-flex.justify-content-between");
+              const input = row ? row.querySelector(".price-input") : null;
+              const newPrice = Number(input ? input.value : NaN);
+              if (Number.isNaN(newPrice) || newPrice < 0) return;
+
+              try {
+                if (itemId) {
+                  const updateRes = await fetch(`${API_BASE_URL}/api/menu/${itemId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ price: newPrice })
+                  });
+                  if (!updateRes.ok) throw new Error("Failed to update price");
+                }
+                items[idx].price = newPrice;
+                btn.textContent = "Saved!";
+                setTimeout(() => { btn.textContent = "Save"; }, 1200);
+              } catch (err) {
+                alert(err.message || "Could not update price.");
+              }
             });
+          });
         }
+      } catch (_) {
+        bodyEl.textContent = "Menu items are not available right now.";
+      }
+    }
 
-        try {
-            const response = await fetch("http://localhost:5000/api/users");
-            allUsers = await response.json();
-            
-            // Initial render of all users
-            renderUsers(allUsers);
+    function applyRolePermissions() {
+      const isSeller = userRole === "seller";
+      const isAdmin = userRole === "admin";
 
-            // Search filter event listener
-            if (searchInput) {
-                searchInput.addEventListener("input", function () {
-                    const searchTerm = this.value.toLowerCase();
-                    const filtered = allUsers.filter(u => {
-                        const name = (u.name || u.username || "").toLowerCase();
-                        const email = (u.email || "").toLowerCase();
-                        return name.includes(searchTerm) || email.includes(searchTerm);
-                    });
-                    renderUsers(filtered);
-                });
+      document.getElementById("navMyStall")?.classList.toggle("d-none", !isSeller);
+      document.getElementById("sellerCtaBand")?.classList.toggle("d-none", !isSeller);
+      document.getElementById("footerMyStall")?.classList.toggle("d-none", !isSeller);
+      document.getElementById("sellerManageSection")?.classList.toggle("d-none", !isSeller);
+      document.getElementById("registeredUsersSection")?.classList.toggle("d-none", !isAdmin);
+
+      const subtitle = document.getElementById("heroSubtitle");
+      if (subtitle) {
+        if (isSeller) {
+          subtitle.textContent = "Browse stalls, add new meals, update meal prices, and toggle your stall's open status.";
+        } else if (isAdmin) {
+          subtitle.textContent = "Browse stalls and manage registered user accounts.";
+        } else {
+          subtitle.textContent = "Browse student-run food stalls, check live open statuses, and view daily menus.";
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      currentUser = getCurrentUser();
+      if (!currentUser || !currentUser.email) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      userRole = String(currentUser.role || "consumer").trim().toLowerCase();
+
+      const welcomeBadge = document.getElementById("welcomeUserBadge");
+      if (welcomeBadge) {
+        welcomeBadge.textContent = `${currentUser.name || currentUser.email} · ${currentUser.role || "Consumer"}`;
+        welcomeBadge.classList.remove("d-none");
+      }
+
+      applyRolePermissions();
+
+      const ribbonItems = ["Student-run", "Open now", "GCash accepted", "Fresh daily", "BU Polangui"];
+      const ribbonHTML = ribbonItems.map(t => `<span>${t}</span><span>★</span>`).join("");
+      document.getElementById("ribbonTrack").innerHTML = ribbonHTML.repeat(6);
+
+      const logoutForm = document.getElementById("logoutForm");
+      if (logoutForm) {
+        logoutForm.addEventListener("submit", e => {
+          e.preventDefault();
+          logoutUser();
+        });
+      }
+
+      const addMealForm = document.getElementById("addMealForm");
+      if (addMealForm) {
+        addMealForm.addEventListener("submit", async e => {
+          e.preventDefault();
+          if (userRole !== "seller") return;
+          const stallId = String(document.getElementById("sellerStallSelect").value);
+          const itemName = document.getElementById("mealNameInput").value.trim();
+          const category = document.getElementById("mealCategoryInput").value.trim() || "Meal";
+          const price = Number(document.getElementById("mealPriceInput").value);
+          if (!stallId || !itemName || Number.isNaN(price) || price < 0) return;
+
+          try {
+            const res = await fetch(`${API_BASE_URL}/api/menu/add`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ stallId, itemName, category, price, isAvailable: true })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+              throw new Error(data.error || data.message || "Failed to add meal.");
             }
+            const feedback = document.getElementById("sellerFeedback");
+            if (feedback) {
+              feedback.textContent = `Added "${itemName}" (\u20B1${price.toFixed(2)}) to menu.`;
+            }
+            addMealForm.reset();
+            document.getElementById("mealCategoryInput").value = "Meal";
+            populateSellerStallSelect();
+          } catch (err) {
+            alert(err.message || "Could not add meal.");
+          }
+        });
+      }
 
-        } catch (error) {
-            console.error("Error fetching users:", error);
-            userListContainer.innerHTML = "<p class='text-danger'>Failed to load users from the server.</p>";
+      document.getElementById("searchForm").addEventListener("submit", e => {
+        e.preventDefault();
+        state.query = document.getElementById("searchInput").value;
+        renderStalls();
+      });
+
+      document.getElementById("searchInput").addEventListener("input", e => {
+        state.query = e.target.value;
+        renderStalls();
+      });
+
+      document.getElementById("filterChips").addEventListener("click", e => {
+        const chip = e.target.closest(".filter-chip");
+        if (!chip) return;
+        document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        state.filter = chip.dataset.filter;
+        renderStalls();
+      });
+
+      document.getElementById("sortSelect").addEventListener("change", e => {
+        state.sort = e.target.value;
+        renderStalls();
+      });
+
+      document.getElementById("clearFilters").addEventListener("click", () => {
+        state.query = "";
+        state.filter = "all";
+        document.getElementById("searchInput").value = "";
+        document.querySelectorAll(".filter-chip").forEach(c => c.classList.toggle("active", c.dataset.filter === "all"));
+        renderStalls();
+      });
+
+      grid.addEventListener("click", async e => {
+        const toggleBtn = e.target.closest(".toggle-stall");
+        if (toggleBtn && userRole === "seller") {
+          const stall = stalls.find(x => String(x.id) === String(toggleBtn.dataset.id));
+          if (!stall) return;
+          const nextOpen = !stall.isOpen;
+          try {
+            const res = await fetch(`${API_BASE_URL}/api/stalls/${stall.id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ isOpen: nextOpen })
+            });
+            if (!res.ok) throw new Error("Failed to update stall status");
+            stall.isOpen = nextOpen;
+            renderStalls();
+          } catch (err) {
+            alert(err.message || "Could not update stall status.");
+          }
+          return;
         }
+
+        const btn = e.target.closest(".view-menu");
+        if (!btn) return;
+        const stall = stalls.find(x => String(x.id) === String(btn.dataset.id));
+        if (stall) openMenuModal(stall);
+      });
+
+      const userListContainer = document.getElementById("userList");
+      if (userListContainer) {
+        userListContainer.addEventListener("click", e => {
+          const delBtn = e.target.closest(".delete-user-btn");
+          if (!delBtn || userRole !== "admin") return;
+          deleteUser(delBtn.dataset.id, delBtn.dataset.email);
+        });
+      }
+
+      const userSearchInput = document.getElementById("userSearchInput");
+      if (userSearchInput) {
+        userSearchInput.addEventListener("input", function () {
+          if (userRole !== "admin") return;
+          const term = this.value.trim().toLowerCase();
+          const filtered = allUsers.filter(u => {
+            const name = (u.name || u.username || "").toLowerCase();
+            const email = (u.email || "").toLowerCase();
+            const role = (u.role || "").toLowerCase();
+            return name.includes(term) || email.includes(term) || role.includes(term);
+          });
+          renderUsers(filtered);
+        });
+      }
+
+      decorateScallops();
+      renderStalls();
+      loadStallsFromApi();
+      if (userRole === "admin") {
+        loadUsersFromApi();
+      }
     });
-    </script>
+  </script>
 </body>
 </html>
