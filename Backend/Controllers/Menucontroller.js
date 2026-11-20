@@ -41,3 +41,16 @@ exports.updateMenuItem = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+// @desc    Delete menu item by ID
+// @route   DELETE /api/menu/:id
+exports.deleteMenuItem = async (req, res) => {
+  try {
+    const deletedItem = await MenuItem.findByIdAndDelete(req.params.id);
+    if (!deletedItem) {
+      return res.status(404).json({ message: 'Menu item not found' });
+    }
+    res.json({ message: 'Menu item deleted successfully' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

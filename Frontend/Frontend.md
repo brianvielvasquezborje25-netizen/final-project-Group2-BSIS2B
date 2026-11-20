@@ -69,7 +69,7 @@ frontend/
 
 ## Phase 5: Dashboard Integration & Search
 
-### **Overview**
+### Overview
 Phase 5 focuses on establishing live data synchronization between the frontend dashboard and the backend API, allowing student-run stalls and administrators to view dynamic user records and filter them in real time.
 
 ### Key Features & Implementation
