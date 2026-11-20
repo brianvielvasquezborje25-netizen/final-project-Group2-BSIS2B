@@ -1,50 +1,127 @@
-document.getElementById('registerForm')?.addEventListener('submit', async function (e) {
-  e.preventDefault();
+document.addEventListener('DOMContentLoaded', function () {
+  const registerForm = document.getElementById('registerForm');
+  const firstNameEl = document.getElementById('firstName');
+  const lastNameEl = document.getElementById('lastName');
+  const emailEl = document.getElementById('email');
+  const sectionEl = document.getElementById('section');
+  const roleEl = document.getElementById('role');
+  const passwordEl = document.getElementById('password');
+  const confirmPasswordEl = document.getElementById('confirmPassword');
+  const confirmFeedbackEl = document.getElementById('confirmFeedback');
+  const errorBox = document.getElementById('registerError');
 
-  // Grab values using your exact HTML element IDs
-  const firstName = document.getElementById('firstName').value.trim();
-  const lastName = document.getElementById('lastName').value.trim();
-  const name = `${firstName} ${lastName}`;
-  const email = document.getElementById('email').value.trim();
-  const section = document.getElementById('section').value.trim();
-  const role = document.getElementById('role').value;
-  const password = document.getElementById('password').value;
-  const confirmPassword = document.getElementById('confirmPassword').value;
-
-  // Simple password match validation
-  if (password !== confirmPassword) {
-    alert('Passwords do not match!');
-    return;
-  }
-
-  try {
-    const response = await fetch('http://localhost:5000/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name,
-        firstName,
-        lastName,
-        email,
-        section,
-        role,
-        password
-      })
-    });
-
-    const data = await response.json();
-    console.log('Server response:', data);
-
-    if (response.ok) {
-      alert('User registered successfully!');
-      window.location.href = 'login.html';
-    } else {
-      alert(`Error: ${data.message || 'Registration failed'}`);
+  function showError(message) {
+    if (!errorBox) {
+      alert(message);
+      return;
     }
-  } catch (error) {
-    console.error('Network error:', error);
-    alert('Could not connect to the backend server. Make sure nodemon is running!');
+    errorBox.textContent = message;
+    errorBox.classList.remove('d-none');
+    errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
+
+  function clearError() {
+    if (errorBox) {
+      errorBox.textContent = '';
+      errorBox.classList.add('d-none');
+    }
+  }
+
+  function validatePasswordMatch() {
+    if (!passwordEl || !confirmPasswordEl) return true;
+    const matches = confirmPasswordEl.value === passwordEl.value;
+
+    if (!matches && confirmPasswordEl.value.length > 0) {
+      const msg = 'Passwords must match.';
+      confirmPasswordEl.setCustomValidity(msg);
+      if (confirmFeedbackEl) confirmFeedbackEl.textContent = msg;
+      return false;
+    }
+
+    confirmPasswordEl.setCustomValidity('');
+    if (confirmFeedbackEl) confirmFeedbackEl.textContent = 'Passwords must match.';
+    return matches;
+  }
+
+  emailEl?.addEventListener('input', function () {
+    this.setCustomValidity('');
+    clearError();
+  });
+
+  passwordEl?.addEventListener('input', function () {
+    validatePasswordMatch();
+    clearError();
+  });
+
+  confirmPasswordEl?.addEventListener('input', function () {
+    validatePasswordMatch();
+    clearError();
+  });
+
+  registerForm?.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    clearError();
+
+    const firstName = firstNameEl?.value.trim() || '';
+    const lastName = lastNameEl?.value.trim() || '';
+    const name = `${firstName} ${lastName}`.trim();
+    const email = emailEl?.value.trim().toLowerCase() || '';
+    const section = sectionEl?.value.trim() || '';
+    const role = roleEl?.value || '';
+    const password = passwordEl?.value || '';
+
+    // Clear stale duplicate-email validity before checking native form validity
+    emailEl?.setCustomValidity('');
+    validatePasswordMatch();
+
+    if (!registerForm.checkValidity()) {
+      registerForm.classList.add('was-validated');
+      if (passwordEl?.value !== confirmPasswordEl?.value) {
+        showError('Passwords do not match.');
+      } else {
+        showError('Please complete all required fields properly.');
+      }
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name,
+          firstName,
+          lastName,
+          email,
+          section,
+          role,
+          password
+        })
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok) {
+        alert('User registered successfully!');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const errorMsg = data.message || data.error || 'Registration failed.';
+      const isDuplicateEmail =
+        response.status === 409 || /already (registered|exists|used)/i.test(errorMsg);
+
+      if (isDuplicateEmail && emailEl) {
+        emailEl.setCustomValidity(errorMsg);
+        registerForm.classList.add('was-validated');
+      }
+
+      showError(errorMsg);
+    } catch (error) {
+      console.error('Network error:', error);
+      showError('Could not connect to the backend server. Make sure your server is running.');
+    }
+  });
 });
