@@ -1,5 +1,5 @@
 // Update this if your backend runs on a different port/host than your frontend
-const API_BASE_URL = "https://bu-entrephub-backend.onrender.com";
+const API_BASE_URL = "https://bufoodhub.onrender.com";
 
 function getStoredUser() {
   const fromLocal = localStorage.getItem("bu_hangout_user");
