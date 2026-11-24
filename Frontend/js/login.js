@@ -1,6 +1,6 @@
 // Update this if your backend runs on a different port/host than your frontend
 // (e.g., "http://localhost:5000" when using Live Server, or "" if served by Express)
-const API_BASE_URL = "http://localhost:5000";
+const API_BASE_URL = "https://bu-entrephub-backend.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
