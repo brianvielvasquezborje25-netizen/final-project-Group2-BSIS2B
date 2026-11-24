@@ -1,12 +1,19 @@
+const API_BASE_URL = "https://bu-entrephub-backend.onrender.com";
+
 window.onload = async function () {
   try {
-    const res = await fetch('http://localhost:5000/api/users');
+    const res = await fetch(`${API_BASE_URL}/api/users`);
+
+    if (!res.ok) {
+      throw new Error(`HTTP error: ${res.status}`);
+    }
+
     const users = await res.json();
 
     const container = document.getElementById('userList');
     if (!container) return;
 
-    container.innerHTML = ''; // Clear previous content
+    container.innerHTML = '';
 
     if (users.length === 0) {
       container.innerHTML = '<p class="text-muted">No users found.</p>';
@@ -22,6 +29,7 @@ window.onload = async function () {
       `;
       container.appendChild(div);
     });
+
   } catch (error) {
     console.error('Error fetching users:', error);
   }
