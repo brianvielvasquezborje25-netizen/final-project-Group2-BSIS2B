@@ -1,3 +1,6 @@
+
+const API_BASE_URL = "https://bufoodhub.onrender.com";
+
 document.addEventListener('DOMContentLoaded', function () {
   const registerForm = document.getElementById('registerForm');
   const firstNameEl = document.getElementById('firstName');
@@ -15,9 +18,13 @@ document.addEventListener('DOMContentLoaded', function () {
       alert(message);
       return;
     }
+
     errorBox.textContent = message;
     errorBox.classList.remove('d-none');
-    errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    errorBox.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest'
+    });
   }
 
   function clearError() {
@@ -29,17 +36,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function validatePasswordMatch() {
     if (!passwordEl || !confirmPasswordEl) return true;
-    const matches = confirmPasswordEl.value === passwordEl.value;
+
+    const matches =
+      confirmPasswordEl.value === passwordEl.value;
 
     if (!matches && confirmPasswordEl.value.length > 0) {
       const msg = 'Passwords must match.';
+
       confirmPasswordEl.setCustomValidity(msg);
-      if (confirmFeedbackEl) confirmFeedbackEl.textContent = msg;
+
+      if (confirmFeedbackEl) {
+        confirmFeedbackEl.textContent = msg;
+      }
+
       return false;
     }
 
     confirmPasswordEl.setCustomValidity('');
-    if (confirmFeedbackEl) confirmFeedbackEl.textContent = 'Passwords must match.';
+
+    if (confirmFeedbackEl) {
+      confirmFeedbackEl.textContent = 'Passwords must match.';
+    }
+
     return matches;
   }
 
@@ -65,41 +83,48 @@ document.addEventListener('DOMContentLoaded', function () {
     const firstName = firstNameEl?.value.trim() || '';
     const lastName = lastNameEl?.value.trim() || '';
     const name = `${firstName} ${lastName}`.trim();
-    const email = emailEl?.value.trim().toLowerCase() || '';
-    const section = sectionEl?.value.trim() || '';
+
+    const email =
+      emailEl?.value.trim().toLowerCase() || '';
+
+    const section =
+      sectionEl?.value.trim() || '';
+
     const role = roleEl?.value || '';
     const password = passwordEl?.value || '';
 
-    // Clear stale duplicate-email validity before checking native form validity
     emailEl?.setCustomValidity('');
     validatePasswordMatch();
 
     if (!registerForm.checkValidity()) {
       registerForm.classList.add('was-validated');
+
       if (passwordEl?.value !== confirmPasswordEl?.value) {
         showError('Passwords do not match.');
       } else {
         showError('Please complete all required fields properly.');
       }
+
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name,
-          firstName,
-          lastName,
-          email,
-          section,
-          role,
-          password
-        })
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/api/users`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            role,
+            section
+          })
+        }
+      );
 
       const data = await response.json().catch(() => ({}));
 
@@ -109,9 +134,14 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      const errorMsg = data.message || data.error || 'Registration failed.';
+      const errorMsg =
+        data.message ||
+        data.error ||
+        'Registration failed. Please try again.';
+
       const isDuplicateEmail =
-        response.status === 409 || /already (registered|exists|used)/i.test(errorMsg);
+        response.status === 409 ||
+        /already (registered|exists|used)/i.test(errorMsg);
 
       if (isDuplicateEmail && emailEl) {
         emailEl.setCustomValidity(errorMsg);
@@ -119,9 +149,13 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       showError(errorMsg);
+
     } catch (error) {
-      console.error('Network error:', error);
-      showError('Could not connect to the backend server. Make sure your server is running.');
+      console.error('Registration error:', error);
+
+      showError(
+        'Cannot connect to the server. Please check your internet connection or try again later.'
+      );
     }
   });
 });
