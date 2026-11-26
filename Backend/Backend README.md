@@ -180,8 +180,6 @@ The database connection is initialized when the backend server starts.
 
 Follow these steps to run the BU Hangout backend on your local machine.
 
-### Prerequisites
-
-Make sure the following tools are installed:
-
-- **Node.js** – JavaScript
+Open VS Code and open the package,json in the Backend Folder
+Open terminal and type npm install
+After installing type npm start

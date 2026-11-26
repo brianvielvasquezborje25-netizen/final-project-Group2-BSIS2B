@@ -1,4 +1,4 @@
-const MenuItem = require('../models/Menuitem');
+const MenuItem = require('../Models/Menuitem');
 
 // @desc    Get menu items (optional filter by stallId: /api/menu?stallId=xxx)
 // @route   GET /api/menu
