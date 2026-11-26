@@ -81,20 +81,37 @@ window.selectStall = async function (id) {
 };
 
 window.deleteStall = async function (id) {
-    if (!confirm('Delete this stall?')) return;
+    const stallsSection = document.querySelector('#stallsTableBody')?.closest('.themed-card, .card, section, div')
+        || document.querySelector('table')?.closest('.themed-card, .card, section, div');
+
+    const stall = allStallsCache.find((s) => String(s._id || s.id) === String(id));
+    const stallLabel = stall?.stallName ? `"${stall.stallName}"` : 'this stall';
+
+    const confirmed = await askManageConfirm(
+        stallsSection,
+        `Are you sure you want to delete ${stallLabel}?`,
+        'Delete stall'
+    );
+    if (!confirmed) return;
+
     try {
         const res = await fetch(`${API_BASE_URL}/api/stalls/${id}`, { method: 'DELETE' });
         if (!res.ok) {
             const errData = await res.json().catch(() => ({}));
-            alert(`Error: ${errData.message || errData.error || 'Failed to delete stall'}`);
+            showManageNotice(
+                stallsSection,
+                errData.message || errData.error || 'Failed to delete stall.',
+                'danger'
+            );
             return;
         }
         if (String(activeStallId) === String(id)) activeStallId = '';
         await loadStalls();
         await loadMenuItems();
+        showManageNotice(stallsSection, 'Stall deleted successfully.', 'success');
     } catch (err) {
         console.error('Delete stall error:', err);
-        alert('Server connection failed.');
+        showManageNotice(stallsSection, 'Server connection failed.', 'danger');
     }
 };
 
