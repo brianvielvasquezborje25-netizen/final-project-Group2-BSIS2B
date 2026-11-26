@@ -249,7 +249,9 @@ document.getElementById('stallForm')?.addEventListener('submit', handleSaveStall
 // 3. ADD ITEM MODAL RESET & SAVE (POST / PUT)
 // ==========================================
 document.getElementById('addItemBtn')?.addEventListener('click', function () {
-    document.getElementById('itemForm')?.reset();
+    const itemForm = document.getElementById('itemForm');
+    itemForm?.reset();
+    itemForm?.querySelector('.manage-inline-notice')?.remove();
 
     const itemIdInput = document.getElementById('itemId');
     if (itemIdInput) itemIdInput.value = '';
@@ -259,6 +261,12 @@ document.getElementById('addItemBtn')?.addEventListener('click', function () {
 });
 
 document.getElementById('saveItemBtn')?.addEventListener('click', async function () {
+    const menuSection = document.querySelector('#menuTableBody')?.closest('.card, section, div')
+        || document.querySelectorAll('table')[1]?.closest('.card, section, div')
+        || document.querySelector('table')?.closest('.card, section, div');
+    const menuModalBody = document.getElementById('itemForm')
+        || document.getElementById('saveItemBtn')?.closest('.modal-content, form, div');
+
     const itemId = document.getElementById('itemId')?.value?.trim() || '';
     const itemName = document.getElementById('itemName')?.value.trim() || '';
     const price = Number(document.getElementById('itemPrice')?.value);
@@ -270,12 +278,12 @@ document.getElementById('saveItemBtn')?.addEventListener('click', async function
     }
 
     if (!itemName || Number.isNaN(price) || price <= 0) {
-        alert('Please fill in both item name and a valid price.');
+        showManageNotice(menuModalBody, 'Please enter a valid item name and price.', 'danger');
         return;
     }
 
     if (!activeStallId) {
-        alert('No stall found. Please save stall details first.');
+        showManageNotice(menuModalBody, 'No stall found. Please save stall details first.', 'danger');
         return;
     }
 
@@ -298,9 +306,9 @@ document.getElementById('saveItemBtn')?.addEventListener('click', async function
 
         const data = await response.json();
         if (response.ok) {
-            alert(isEditing ? 'Menu item updated successfully!' : 'Menu item added successfully!');
-
             document.getElementById('itemForm')?.reset();
+            menuModalBody?.querySelector('.manage-inline-notice')?.remove();
+
             const itemIdInput = document.getElementById('itemId');
             if (itemIdInput) itemIdInput.value = '';
 
@@ -309,12 +317,21 @@ document.getElementById('saveItemBtn')?.addEventListener('click', async function
             if (modal) modal.hide();
 
             await loadMenuItems();
+            showManageNotice(
+                menuSection,
+                isEditing ? 'Menu item updated successfully.' : 'Menu item added successfully.',
+                'success'
+            );
         } else {
-            alert(`Error: ${data.error || data.message || 'Failed to save menu item'}`);
+            showManageNotice(
+                menuModalBody,
+                data.error || data.message || 'Failed to save menu item.',
+                'danger'
+            );
         }
     } catch (error) {
         console.error('Network Error:', error);
-        alert('Server connection failed.');
+        showManageNotice(menuModalBody, 'Server connection failed. Make sure your server is running.', 'danger');
     }
 });
 
