@@ -335,6 +335,84 @@ document.getElementById('saveItemBtn')?.addEventListener('click', async function
     }
 });
 
+function askManageConfirm(targetEl, message, confirmLabel = 'Delete') {
+    return new Promise((resolve) => {
+        if (!targetEl) {
+            resolve(window.confirm(message));
+            return;
+        }
+
+        const existingConfirm = targetEl.querySelector('.manage-inline-confirm');
+        if (existingConfirm) existingConfirm.remove();
+
+        const box = document.createElement('div');
+        box.className = 'manage-inline-confirm mt-3';
+        Object.assign(box.style, {
+            backgroundColor: '#fdf2e9',
+            color: '#3b2314',
+            border: '1.5px solid #c98a5b',
+            borderRadius: '10px',
+            padding: '12px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+            flexWrap: 'wrap',
+            fontSize: '0.92rem',
+            fontWeight: '500'
+        });
+
+        const text = document.createElement('span');
+        text.textContent = message;
+
+        const actions = document.createElement('div');
+        actions.style.display = 'flex';
+        actions.style.gap = '8px';
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.textContent = 'Cancel';
+        Object.assign(cancelBtn.style, {
+            backgroundColor: '#ffffff',
+            color: '#3b2314',
+            border: '1px solid #8c6d58',
+            borderRadius: '8px',
+            padding: '6px 12px',
+            fontSize: '0.85rem',
+            fontWeight: '600',
+            cursor: 'pointer'
+        });
+
+        const okBtn = document.createElement('button');
+        okBtn.type = 'button';
+        okBtn.textContent = confirmLabel;
+        Object.assign(okBtn.style, {
+            backgroundColor: '#9e2a2b',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '6px 12px',
+            fontSize: '0.85rem',
+            fontWeight: '600',
+            cursor: 'pointer'
+        });
+
+        const cleanup = (result) => {
+            box.remove();
+            resolve(result);
+        };
+
+        cancelBtn.addEventListener('click', () => cleanup(false));
+        okBtn.addEventListener('click', () => cleanup(true));
+
+        actions.appendChild(cancelBtn);
+        actions.appendChild(okBtn);
+        box.appendChild(text);
+        box.appendChild(actions);
+        targetEl.appendChild(box);
+    });
+}
+
 // ==========================================
 // 4. LOAD, EDIT & DELETE MENU ITEMS
 // ==========================================
@@ -392,14 +470,14 @@ async function editMenuItem(id) {
 
         const response = await fetch(url);
         if (!response.ok) {
-            alert('Failed to fetch menu item details.');
+            showManageNotice(menuSection, 'Failed to fetch menu item details.', 'danger');
             return;
         }
 
         const items = await response.json();
         const item = Array.isArray(items) ? items.find((entry) => entry._id === id) : null;
         if (!item) {
-            alert('Menu item not found.');
+            showManageNotice(menuSection, 'Menu item not found.', 'danger');
             return;
         }
 
@@ -428,28 +506,41 @@ async function editMenuItem(id) {
         }
     } catch (error) {
         console.error('Error loading menu item for editing:', error);
-        alert('Server connection failed while loading menu item.');
+            showManageNotice(menuSection, 'Server connection failed while loading menu item.', 'danger');
     }
 }
 
 async function deleteMenuItem(id) {
-    if (!confirm('Are you sure you want to delete this menu item?')) return;
+    const menuSection = document.querySelector('#menuTableBody')?.closest('.card, section, div')
+        || document.querySelectorAll('table')[1]?.closest('.card, section, div')
+        || document.querySelector('table')?.closest('.card, section, div');
+
+    const confirmed = await askManageConfirm(
+        menuSection,
+        'Are you sure you want to delete this menu item?',
+        'Delete item'
+    );
+    if (!confirmed) return;
 
     try {
         const response = await fetch(`${API_BASE_URL}/api/menu/${id}`, {
             method: 'DELETE'
         });
 
-        const data = await response.json();
+        const data = await response.json().catch(() => ({}));
         if (response.ok) {
-            alert('Menu item deleted successfully!');
             await loadMenuItems();
+            showManageNotice(menuSection, 'Menu item deleted successfully.', 'success');
         } else {
-            alert(`Error: ${data.error || data.message || 'Failed to delete menu item'}`);
+            showManageNotice(
+                menuSection,
+                data.error || data.message || 'Failed to delete menu item.',
+                'danger'
+            );
         }
     } catch (error) {
         console.error('Delete error:', error);
-        alert('Server connection failed.');
+        showManageNotice(menuSection, 'Server connection failed while deleting menu item.', 'danger');
     }
 }
 
