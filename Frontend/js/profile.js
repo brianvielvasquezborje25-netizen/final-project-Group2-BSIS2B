@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const profileForm = document.getElementById("profileForm");
   const passwordForm = document.getElementById("passwordForm");
+  const currentPasswordInput = document.getElementById("currentPassword");
   const newPasswordInput = document.getElementById("newPassword");
   const confirmNewPasswordInput = document.getElementById("confirmNewPassword");
   const deleteAccountForm = document.getElementById("deleteAccountForm");
@@ -173,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (passwordForm) {
-    passwordForm.addEventListener("submit", (event) => {
+    passwordForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (newPasswordInput && confirmNewPasswordInput) {
         if (newPasswordInput.value !== confirmNewPasswordInput.value) {
@@ -185,11 +186,47 @@ document.addEventListener("DOMContentLoaded", () => {
       passwordForm.classList.add("was-validated");
       if (!passwordForm.checkValidity()) return;
 
-      showProfileNotice(
-        passwordForm,
-        "Password form validated. Connect a password-update endpoint in Userroutes.js to save to MongoDB.",
-        "warning"
-      );
+      try {
+        const currentPassword = currentPasswordInput ? currentPasswordInput.value : "";
+        const newPassword = newPasswordInput.value;
+        const userId = user?._id || user?.id;
+
+        if (!userId) {
+          showProfileNotice(passwordForm, "Unable to identify the logged-in user.", "danger");
+          return;
+        }
+
+        const res = await fetch(`${API_BASE_URL}/api/users/${userId}/password`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ currentPassword, newPassword }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showProfileNotice(
+            passwordForm,
+            data.message || "Failed to update password.",
+            "danger"
+          );
+          return;
+        }
+
+        passwordForm.reset();
+        passwordForm.classList.remove("was-validated");
+        showProfileNotice(
+          passwordForm,
+          data.message || "Password updated successfully!",
+          "success"
+        );
+      } catch (err) {
+        showProfileNotice(
+          passwordForm,
+          "Unable to connect to server. Please try again.",
+          "danger"
+        );
+      }
     });
   }
 
