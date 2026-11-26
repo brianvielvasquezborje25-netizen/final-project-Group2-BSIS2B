@@ -83,7 +83,7 @@ window.selectStall = async function (id) {
 window.deleteStall = async function (id) {
     if (!confirm('Delete this stall?')) return;
     try {
-        const res = await fetch(`${API_BASE_URL}/stalls/${id}`, { method: 'DELETE' });
+        const res = await fetch(`${API_BASE_URL}/api/stalls/${id}`, { method: 'DELETE' });
         if (!res.ok) {
             const errData = await res.json().catch(() => ({}));
             alert(`Error: ${errData.message || errData.error || 'Failed to delete stall'}`);
@@ -103,7 +103,7 @@ window.deleteStall = async function (id) {
 // ==========================================
 async function loadStalls() {
     try {
-        const res = await fetch(`${API_BASE_URL}/stalls`);
+        const res = await fetch(`${API_BASE_URL}/api/stalls`);
         if (!res.ok) return;
 
         const stalls = await res.json();
@@ -138,13 +138,45 @@ document.querySelectorAll('form').forEach((form) => {
     form.addEventListener('submit', (e) => e.preventDefault());
 });
 
+function showManageNotice(targetEl, message, type = 'success') {
+    if (!targetEl) return;
+
+    const existing = targetEl.querySelector('.manage-inline-notice');
+    if (existing) existing.remove();
+
+    const notice = document.createElement('div');
+    notice.className = 'manage-inline-notice mt-3';
+    notice.setAttribute('role', 'alert');
+    notice.textContent = message;
+
+    const isSuccess = type === 'success';
+    Object.assign(notice.style, {
+        backgroundColor: isSuccess ? '#d4e8dc' : '#f8d7da',
+        color: isSuccess ? '#1f4d36' : '#6e1d26',
+        border: `1.5px solid ${isSuccess ? '#6ba382' : '#d67a84'}`,
+        borderRadius: '10px',
+        padding: '12px 16px',
+        fontSize: '0.92rem',
+        fontWeight: '500'
+    });
+
+    targetEl.appendChild(notice);
+
+    setTimeout(() => {
+        notice.remove();
+    }, 4500);
+}
+
 async function handleSaveStall(e) {
     e?.preventDefault();
+
+    const stallCard = document.getElementById('stallForm')
+        || document.getElementById('saveStallBtn')?.closest('form, .card, div');
 
     const currentUser = getLoggedInUser();
     const ownerId = currentUser?._id || currentUser?.id;
     if (!ownerId) {
-        alert('Please log in first before saving stall details.');
+        showManageNotice(stallCard, 'Please log in first before saving stall details.', 'danger');
         return;
     }
 
@@ -160,7 +192,7 @@ async function handleSaveStall(e) {
         ?? false;
 
     if (!stallName || !section) {
-        alert('Please enter both stall name and course/section.');
+        showManageNotice(stallCard, 'Please enter both stall name and course/section.', 'danger');
         return;
     }
 
@@ -190,15 +222,23 @@ async function handleSaveStall(e) {
         const data = await response.json();
         if (response.ok) {
             activeStallId = data._id || data.stall?._id || data.id || activeStallId;
-            alert(isUpdate ? 'Stall details updated successfully!' : 'Stall details saved to database successfully!');
+            showManageNotice(
+                stallCard,
+                isUpdate ? 'Stall details updated successfully.' : 'Stall details saved to database successfully.',
+                'success'
+            );
             await loadStalls();
             await loadMenuItems();
         } else {
-            alert(`Error: ${data.message || data.error || 'Failed to save stall details'}`);
+            showManageNotice(
+                stallCard,
+                data.message || data.error || 'Failed to save stall details.',
+                'danger'
+            );
         }
     } catch (error) {
         console.error('Network Error:', error);
-        alert('Server connection failed. Make sure your server is running.');
+        showManageNotice(stallCard, 'Server connection failed. Make sure your server is running.', 'danger');
     }
 }
 
@@ -240,7 +280,7 @@ document.getElementById('saveItemBtn')?.addEventListener('click', async function
     }
 
     const isEditing = Boolean(itemId);
-    const url = isEditing ? `${API_BASE_URL}/menu/${itemId}` : `${API_BASE_URL}/menu/add`;
+    const url = isEditing ? `${API_BASE_URL}/api/menu/${itemId}` : `${API_BASE_URL}/api/menu/add`;
     const method = isEditing ? 'PUT' : 'POST';
 
     try {
@@ -288,8 +328,8 @@ async function loadMenuItems() {
         }
 
         const url = activeStallId
-            ? `${API_BASE_URL}/menu?stallId=${activeStallId}`
-            : `${API_BASE_URL}/menu`;
+            ? `${API_BASE_URL}/api/menu?stallId=${activeStallId}`
+            : `${API_BASE_URL}/api/menu`;
 
         const response = await fetch(url);
         if (!response.ok) return;
@@ -330,8 +370,8 @@ async function editMenuItem(id) {
         }
 
         const url = activeStallId
-            ? `${API_BASE_URL}/menu?stallId=${activeStallId}`
-            : `${API_BASE_URL}/menu`;
+            ? `${API_BASE_URL}/api/menu?stallId=${activeStallId}`
+            : `${API_BASE_URL}/api/menu`;
 
         const response = await fetch(url);
         if (!response.ok) {
@@ -379,7 +419,7 @@ async function deleteMenuItem(id) {
     if (!confirm('Are you sure you want to delete this menu item?')) return;
 
     try {
-        const response = await fetch(`${API_BASE_URL}/menu/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/menu/${id}`, {
             method: 'DELETE'
         });
 
