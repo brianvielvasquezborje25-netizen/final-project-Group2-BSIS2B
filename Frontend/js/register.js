@@ -129,9 +129,12 @@ document.addEventListener('DOMContentLoaded', function () {
       const data = await response.json().catch(() => ({}));
 
       if (response.ok) {
-        alert('User registered successfully!');
-        window.location.href = 'login.html';
-        return;
+       const successModal = new bootstrap.Modal(document.getElementById('registerSuccessModal'));
+        successModal.show();
+        document.getElementById('confirmRegisterBtn').addEventListener('click', () => {
+          window.location.href = 'login.html'; // Change to your login filename if different
+      });
+              return;
       }
 
       const errorMsg =

@@ -115,3 +115,24 @@ h1, h2, h3, .display-font { font-family: 'Bagel Fat One', cursive; font-weight: 
 .doodle.d2 { bottom: -22px; right: 40px; transform: rotate(12deg); background: var(--coral); }
 
 .page-wrap { min-height: calc(100vh - 260px); }
+
+/* Custom registration confirmation modal */
+.custom-theme-modal {
+  background-color: #f5efe6;
+  color: #3b2314;
+  border: 2px solid #2d5a3c;
+  border-radius: 16px;
+}
+
+.custom-theme-btn {
+  background-color: #3b2314;
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 8px 22px;
+  font-weight: 600;
+}
+
+.custom-theme-btn:hover {
+  background-color: #2d5a3c;
+  color: #ffffff;
+}
