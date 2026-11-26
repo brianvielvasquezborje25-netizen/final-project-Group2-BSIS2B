@@ -115,14 +115,14 @@ cd Backend
 npm install
 ```
 
-Copy `.env.example` to `.env` and replace the placeholder database URI with your MongoDB connection string. Set `CLIENT_ORIGINS` to the exact origin(s) serving your frontend (comma-separated, without trailing slashes).
+Create a file named `.env` inside the `Backend` directory. Add your MongoDB connection string and set `CLIENT_ORIGINS` to the exact origin(s) serving your frontend (comma-separated, without trailing slashes).
 
 Example `.env` configuration:
 
 ```env
 PORT=5000
 MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/<database-name>
-CLIENT_ORIGINS=http://localhost:5500,https://your-frontend-domain.example
+CLIENT_ORIGINS=http://localhost:5500,https://bu-hangout-group-2.vercel.app
 NODE_ENV=development
 ```
 
