@@ -600,96 +600,151 @@
   const bodyEl = document.getElementById("menuModalBody");
   bodyEl.innerHTML = "Loading menu items...";
 
-  const modal = new bootstrap.Modal(document.getElementById("menuModal"));
+  const modalEl = document.getElementById("menuModal");
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
   modal.show();
 
-  const endpoint = `${API_BASE_URL}/api/menu?stallId=${encodeURIComponent(stall.id)}`;
+  const extractItems = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (!payload || typeof payload !== "object") return [];
+    for (const key of ["menus", "menuItems", "items", "menu", "data", "results"]) {
+      if (Array.isArray(payload[key])) return payload[key];
+      if (payload[key] && typeof payload[key] === "object") {
+        for (const innerKey of ["menus", "menuItems", "items", "menu"]) {
+          if (Array.isArray(payload[key][innerKey])) return payload[key][innerKey];
+        }
+      }
+    }
+    return [];
+  };
 
-  try {
-    const res = await fetch(endpoint);
+  const fetchJson = async (url) => {
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) {
-      throw new Error(`HTTP ${res.status} (${res.statusText || "Request failed"})`);
+      throw new Error(`HTTP ${res.status} (${url})`);
     }
+    return await res.json();
+  };
 
-    const data = await res.json();
-    const items = Array.isArray(data)
-      ? data
-      : Array.isArray(data.menus)
-      ? data.menus
-      : Array.isArray(data.items)
-      ? data.items
-      : Array.isArray(data.menuItems)
-      ? data.menuItems
-      : [];
+  const stallIdStr = String(stall.id ?? "").trim();
+  const stallNameLower = String(stall.name ?? "").trim().toLowerCase();
 
-    if (items.length === 0) {
-      bodyEl.textContent = "No menu items posted for this stall yet.";
-      return;
-    }
+  let items = [];
+  let lastError = null;
+  let lastUrl = `${API_BASE_URL}/api/menu?stallId=${encodeURIComponent(stallIdStr)}`;
 
-    bodyEl.innerHTML = items.map((item, index) => {
-      const itemName = item.itemName || item.name || "Menu Item";
-      const priceVal = Number(item.price ?? 0);
-      const availBadge = item.isAvailable === false
-        ? `<span class="badge bg-secondary ms-2">Unavailable</span>`
-        : `<span class="badge bg-success ms-2">Available</span>`;
+  const candidateUrls = [
+    `${API_BASE_URL}/api/menu?stallId=${encodeURIComponent(stallIdStr)}`,
+    `${API_BASE_URL}/api/menu?stall_id=${encodeURIComponent(stallIdStr)}`,
+    `${API_BASE_URL}/api/menu?stall=${encodeURIComponent(stallIdStr)}`,
+    `${API_BASE_URL}/api/menu`
+  ];
 
-      const priceControls = userRole === "seller" ? `
-        <div class="d-flex align-items-center gap-1">
-          <input type="number" step="0.5" min="0" class="form-control form-control-sm price-input"
-                 style="width:85px;border:2px solid var(--ink)" value="${esc(priceVal)}" aria-label="Price for ${esc(itemName)}">
-          <button type="button" class="btn btn-ink btn-sm save-price-btn" data-id="${esc(item._id || item.id || "")}" data-index="${index}">
-            Save
-          </button>
-        </div>` : `<span class="fw-bold">₱${priceVal.toFixed(2)}</span>`;
+  for (let i = 0; i < candidateUrls.length; i++) {
+    const url = candidateUrls[i];
+    lastUrl = url;
+    try {
+      const data = await fetchJson(url);
+      const parsed = extractItems(data);
 
-      return `
-        <div class="d-flex justify-content-between align-items-center gap-2 py-2 border-bottom border-dark">
-          <div>
-            <span class="fw-bold">${esc(itemName)}</span>
-            ${availBadge}
-            <div class="small" style="color:var(--muted)">${esc(item.category || "Meal")}</div>
-          </div>
-          ${priceControls}
-        </div>`;
-    }).join("");
+      // If this is the unfiltered /api/menu fallback, match items belonging to this stall
+      if (i === candidateUrls.length - 1) {
+        items = parsed.filter((item) => {
+          const itemStallId = String(
+            item.stallId ?? item.stall_id ?? (item.stall && (item.stall._id || item.stall.id)) ?? ""
+          ).trim();
+          const itemStallName = String(
+            item.stallName ?? item.stall_name ?? (item.stall && (item.stall.stallName || item.stall.name)) ?? ""
+          ).trim().toLowerCase();
 
-    if (userRole === "seller") {
-      bodyEl.querySelectorAll(".save-price-btn").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const itemId = btn.dataset.id;
-          const idx = Number(btn.dataset.index);
-          const row = btn.closest("div.d-flex.justify-content-between");
-          const input = row ? row.querySelector(".price-input") : null;
-          const newPrice = Number(input ? input.value : NaN);
-          if (Number.isNaN(newPrice) || newPrice < 0) return;
-
-          try {
-            if (itemId) {
-              const updateRes = await fetch(`${API_BASE_URL}/api/menu/${itemId}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ price: newPrice })
-              });
-              if (!updateRes.ok) throw new Error("Failed to update price");
-            }
-            items[idx].price = newPrice;
-            btn.textContent = "Saved!";
-            setTimeout(() => { btn.textContent = "Save"; }, 1200);
-          } catch (err) {
-            alert(err.message || "Could not update price.");
-          }
+          return (
+            (stallIdStr && itemStallId && itemStallId === stallIdStr) ||
+            (stallNameLower && itemStallName && itemStallName === stallNameLower)
+          );
         });
-      });
+      } else {
+        items = parsed;
+      }
+
+      lastError = null;
+      if (items.length > 0) break;
+    } catch (err) {
+      lastError = err;
     }
-  } catch (err) {
+  }
+
+  if (lastError && items.length === 0) {
     bodyEl.innerHTML = `
       <div>Menu items are not available right now.</div>
-      <div class="small mt-1" style="color:var(--muted)">Reason: ${esc(err && err.message ? err.message : "Network error")}</div>
-      <div class="small mt-1" style="color:var(--muted)">URL: ${esc(endpoint)}</div>
+      <div class="small mt-1" style="color:var(--muted)">Reason: ${esc(lastError.message || "Network error")}</div>
+      <div class="small mt-1" style="color:var(--muted)">URL: ${esc(lastUrl)}</div>
     `;
+    return;
+  }
+
+  if (items.length === 0) {
+    bodyEl.textContent = "No menu items posted for this stall yet.";
+    return;
+  }
+
+  bodyEl.innerHTML = items.map((item, index) => {
+    const itemName = item.itemName || item.name || item.title || "Menu Item";
+    const priceVal = Number(item.price ?? 0);
+    const isAvail = item.isAvailable ?? item.available ?? true;
+    const availBadge = isAvail === false
+      ? `<span class="badge bg-secondary ms-2">Unavailable</span>`
+      : `<span class="badge bg-success ms-2">Available</span>`;
+
+    const priceControls = userRole === "seller" ? `
+      <div class="d-flex align-items-center gap-1">
+        <input type="number" step="0.5" min="0" class="form-control form-control-sm price-input"
+               style="width:85px;border:2px solid var(--ink)" value="${esc(priceVal)}" aria-label="Price for ${esc(itemName)}">
+        <button type="button" class="btn btn-ink btn-sm save-price-btn" data-id="${esc(item._id || item.id || "")}" data-index="${index}">
+          Save
+        </button>
+      </div>` : `<span class="fw-bold">₱${priceVal.toFixed(2)}</span>`;
+
+    return `
+      <div class="d-flex justify-content-between align-items-center gap-2 py-2 border-bottom border-dark">
+        <div>
+          <span class="fw-bold">${esc(itemName)}</span>
+          ${availBadge}
+          <div class="small" style="color:var(--muted)">${esc(item.category || "Meal")}</div>
+        </div>
+        ${priceControls}
+      </div>`;
+  }).join("");
+
+  if (userRole === "seller") {
+    bodyEl.querySelectorAll(".save-price-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const itemId = btn.dataset.id;
+        const idx = Number(btn.dataset.index);
+        const row = btn.closest("div.d-flex.justify-content-between");
+        const input = row ? row.querySelector(".price-input") : null;
+        const newPrice = Number(input ? input.value : NaN);
+        if (Number.isNaN(newPrice) || newPrice < 0) return;
+
+        try {
+          if (itemId) {
+            const updateRes = await fetch(`${API_BASE_URL}/api/menu/${itemId}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ price: newPrice })
+            });
+            if (!updateRes.ok) throw new Error("Failed to update price");
+          }
+          items[idx].price = newPrice;
+          btn.textContent = "Saved!";
+          setTimeout(() => { btn.textContent = "Save"; }, 1200);
+        } catch (err) {
+          alert(err.message || "Could not update price.");
+        }
+      });
+    });
   }
 }
+
     function applyRolePermissions() {
       const isSeller = userRole === "seller";
       const isAdmin = userRole === "admin";
