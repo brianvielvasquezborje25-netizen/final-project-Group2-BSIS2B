@@ -41,11 +41,19 @@ const extraOrigins = (process.env.CLIENT_ORIGINS || '')
 
 const allowedOrigins = [...new Set([...defaultOrigins, ...extraOrigins])];
 
+// Also allow every Vercel production/preview URL of this project,
+// e.g. bu-hangout-group-2-ejpa2t3pp-group-2-388f.vercel.app
+const vercelPattern = /^https:\/\/bu-hangout-group-2[a-z0-9-]*\.vercel\.app$/;
+
 app.use(
   cors({
     origin(origin, callback) {
       // Allow tools like Postman/curl (no Origin header) and whitelisted sites
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        vercelPattern.test(origin)
+      ) {
         return callback(null, true);
       }
       return callback(new Error(`CORS blocked for origin: ${origin}`));
