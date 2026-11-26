@@ -169,7 +169,7 @@ async function handleSaveStall(e) {
     const targetId = existingOwned?._id || existingOwned?.id || activeStallId;
     const isUpdate = Boolean(existingOwned || targetId);
 
-    const url = isUpdate ? `${API_BASE_URL}/stalls/${targetId}` : `${API_BASE_URL}/stalls`;
+    const url = isUpdate ? `${API_BASE_URL}/api/stalls/${targetId}` : `${API_BASE_URL}/api/stalls`;
     const method = isUpdate ? 'PUT' : 'POST';
 
     try {
