@@ -1,73 +1,108 @@
+
+'use strict';
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const dns = require('dns');
 
-// 1. Load environment variables (.env locally; Render uses its own env vars)
+// Load environment variables
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
-// Use Google DNS for resolving MongoDB Atlas SRV records (fixes some ISP DNS issues)
+// Configure DNS for MongoDB Atlas
 try {
   dns.setServers(['8.8.8.8', '8.8.4.4']);
-} catch (err) {
-  console.warn('Could not set custom DNS servers:', err.message);
+} catch (error) {
+  console.warn('Could not configure custom DNS servers:', error.message);
 }
 
-// 2. Database connection
 const connectDB = require('./config/db');
-
 const app = express();
 
-// Render sits behind a proxy; this keeps req.ip / protocol accurate
+// Render reverse proxy support
 app.set('trust proxy', 1);
 
-// ---------------------------------------------------------------------------
-// CORS
-// Allowed origins: your Vercel site + local dev + anything in CLIENT_ORIGINS
-// (comma-separated) set in Render's environment variables.
-// ---------------------------------------------------------------------------
-const defaultOrigins = [
+// ==========================================
+// CORS CONFIGURATION
+// ==========================================
+
+const allowedOrigins = new Set([
+  // Render frontend
+  'https://final-project-group2-bsis2b.onrender.com',
+
+  // Vercel frontend
   'https://bu-hangout-group-2.vercel.app',
+
+  // Local development
   'http://localhost:5500',
   'http://127.0.0.1:5500',
   'http://localhost:3000',
+  'http://127.0.0.1:3000',
   'http://localhost:5000',
-];
+  'http://127.0.0.1:5000',
+]);
 
-const extraOrigins = (process.env.CLIENT_ORIGINS || '')
+// Additional origins from Render environment variables
+const configuredOrigins = (process.env.CLIENT_ORIGINS || '')
   .split(',')
-  .map((o) => o.trim())
+  .map(origin => origin.trim().replace(/\/+$/, ''))
   .filter(Boolean);
 
-const allowedOrigins = [...new Set([...defaultOrigins, ...extraOrigins])];
+configuredOrigins.forEach(origin => allowedOrigins.add(origin));
 
-// Also allow every Vercel production/preview URL of this project,
-// e.g. bu-hangout-group-2-ejpa2t3pp-group-2-388f.vercel.app
-const vercelPattern = /^https:\/\/bu-hangout-group-2[a-z0-9-]*\.vercel\.app$/;
+// Allow Vercel preview deployments
+const vercelPreviewPattern =
+  /^https:\/\/bu-hangout-group-2[a-z0-9-]*\.vercel\.app$/i;
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      // Allow tools like Postman/curl (no Origin header) and whitelisted sites
-      if (
-        !origin ||
-        allowedOrigins.includes(origin) ||
-        vercelPattern.test(origin)
-      ) {
-        return callback(null, true);
-      }
-      return callback(new Error(`CORS blocked for origin: ${origin}`));
-    },
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
-);
+const corsOptions = {
+  origin(origin, callback) {
+    // Allow requests without an Origin header
+    if (!origin) {
+      return callback(null, true);
+    }
 
-// Body parsers
+    const normalizedOrigin = origin.replace(/\/+$/, '');
+
+    if (
+      allowedOrigins.has(normalizedOrigin) ||
+      vercelPreviewPattern.test(normalizedOrigin)
+    ) {
+      return callback(null, true);
+    }
+
+    console.warn(`CORS rejected request from origin: ${origin}`);
+    return callback(
+      new Error(`CORS blocked for origin: ${origin}`)
+    );
+  },
+
+  methods: [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+  ],
+
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization'
+  ],
+
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+
+// ==========================================
+// MIDDLEWARE
+// ==========================================
+
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Simple request logger (skipped in production to keep logs clean)
+// Development request logging
 if (process.env.NODE_ENV !== 'production') {
   app.use((req, res, next) => {
     console.log(`${req.method} ${req.originalUrl}`);
@@ -75,82 +110,145 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-// ---------------------------------------------------------------------------
-// Health / sanity routes
-// ---------------------------------------------------------------------------
+// ==========================================
+// HEALTH CHECK ROUTES
+// ==========================================
+
 app.get('/', (req, res) => {
   res.status(200).send('API is running successfully!');
 });
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', uptime: process.uptime() });
+  res.status(200).json({
+    status: 'ok',
+    uptime: process.uptime()
+  });
 });
 
-// ---------------------------------------------------------------------------
-// API routes (names match your folder/file capitalization exactly,
-// which matters on Linux hosts like Render)
-// ---------------------------------------------------------------------------
+// ==========================================
+// API ROUTES
+// ==========================================
+
 app.use('/api/auth', require('./Routes/Authroutes'));
 app.use('/api/users', require('./Routes/Userroutes'));
 app.use('/api/stalls', require('./Routes/Stallroutes'));
 app.use('/api/menu', require('./Routes/Menuroutes'));
 
-// 404 handler for unmatched routes
-app.use((req, res) => {
-  res.status(404).json({ message: `Route not found - ${req.originalUrl}` });
-});
+// ==========================================
+// 404 HANDLER
+// ==========================================
 
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error('Unhandled Error:', err.stack || err);
-  const status = err.status || (err.message && err.message.startsWith('CORS') ? 403 : 500);
-  res.status(status).json({
-    message: status === 403 ? 'Forbidden' : 'Server Error',
-    error: err.message,
+app.use((req, res) => {
+  res.status(404).json({
+    message: `Route not found - ${req.originalUrl}`
   });
 });
 
-// ---------------------------------------------------------------------------
-// Start server only after the database connection is ready
-// ---------------------------------------------------------------------------
-const PORT = process.env.PORT || 5000;
-let server;
+// ==========================================
+// GLOBAL ERROR HANDLER
+// ==========================================
 
-async function start() {
+app.use((err, req, res, next) => {
+  console.error('Request error:', err.stack || err);
+
+  const isCorsError =
+    typeof err.message === 'string' &&
+    err.message.startsWith('CORS blocked for origin:');
+
+  const statusCode = isCorsError
+    ? 403
+    : (err.status || 500);
+
+  res.status(statusCode).json({
+    message: isCorsError
+      ? 'Origin is not allowed by CORS.'
+      : 'Server Error',
+
+    error: process.env.NODE_ENV === 'production'
+      ? undefined
+      : err.message
+  });
+});
+
+// ==========================================
+// DATABASE AND SERVER STARTUP
+// ==========================================
+
+const PORT = process.env.PORT || 5000;
+
+let server;
+let isShuttingDown = false;
+
+async function startServer() {
   try {
     await connectDB();
-    server = app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+
+    server = app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Backend server is listening on port ${PORT}`);
+      console.log('Database connection established.');
     });
-  } catch (err) {
-    console.error('Failed to start server:', err.message || err);
+
+    server.on('error', error => {
+      console.error('HTTP server error:', error);
+      process.exit(1);
+    });
+
+  } catch (error) {
+    console.error(
+      'Failed to connect to the database or start the server:',
+      error
+    );
+
     process.exit(1);
   }
 }
 
-start();
-
-// ---------------------------------------------------------------------------
-// Safety nets and graceful shutdown
-// ---------------------------------------------------------------------------
-process.on('unhandledRejection', (reason) => {
-  console.error('Unhandled Promise Rejection:', reason);
-});
-
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-  process.exit(1);
-});
+// ==========================================
+// GRACEFUL SHUTDOWN
+// ==========================================
 
 function shutdown(signal) {
-  console.log(`${signal} received. Shutting down...`);
-  if (server) {
-    server.close(() => process.exit(0));
-    setTimeout(() => process.exit(1), 10000).unref();
-  } else {
+  if (isShuttingDown) return;
+
+  isShuttingDown = true;
+
+  console.log(`${signal} received. Shutting down gracefully...`);
+
+  if (!server) {
     process.exit(0);
+    return;
   }
+
+  server.close(error => {
+    if (error) {
+      console.error('Error while closing the server:', error);
+      process.exit(1);
+      return;
+    }
+
+    console.log('HTTP server closed.');
+    process.exit(0);
+  });
+
+  setTimeout(() => {
+    console.error('Graceful shutdown timed out. Forcing exit.');
+    process.exit(1);
+  }, 10000).unref();
 }
 
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));
+
+process.on('unhandledRejection', reason => {
+  console.error('Unhandled promise rejection:', reason);
+});
+
+process.on('uncaughtException', error => {
+  console.error('Uncaught exception:', error);
+  shutdown('uncaughtException');
+});
+
+// Start application
+startServer();
+
+module.exports = app;
