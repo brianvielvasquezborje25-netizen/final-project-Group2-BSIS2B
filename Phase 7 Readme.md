@@ -32,8 +32,6 @@ The project consists of a static, responsive frontend and a Node.js/Express REST
 
 https://final-project-group2-bsis2b.onrender.com
 
-The backend root endpoint (`/`) also returns a plain-text API status message. Availability of the hosted services depends on their deployment configuration.
-
 ## Features
 
 ### Consumer experience
