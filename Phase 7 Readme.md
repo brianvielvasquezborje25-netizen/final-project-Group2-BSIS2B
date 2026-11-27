@@ -99,7 +99,7 @@ BU-Hangout/
 ### 1. Get the source code
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/brianvielvasquezborje25-netizen/final-project-Group2-BSIS2B/tree/main
 cd final-project-Group2-BSIS2B-main
 ```
 
@@ -114,11 +114,11 @@ npm install
 
 Create a file named `.env` inside the `Backend` directory. Add your MongoDB connection string and set `CLIENT_ORIGINS` to the exact origin(s) serving your frontend (comma-separated, without trailing slashes).
 
-Example `.env` configuration:
+.env configuration:
 
 ```env
 PORT=5000
-MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/<database-name>
+MONGODB_URI=mongodb+srv://RaiverSarte:aKnkaK9kECXdkIh7@cluster0.wva04ph.mongodb.net/
 CLIENT_ORIGINS=http://localhost:5500,https://bu-hangout-group-2.vercel.app
 NODE_ENV=development
 ```
